@@ -1,0 +1,43 @@
+@charset "utf-8";
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web");
+
+html,
+body {
+  font-family: "Titillium Web", sans-serif;
+}
+
+.yare {
+  background-color: blueviolet;
+  color: white;
+}
+
+a.disabled {
+  pointer-events: none;
+}
+
+.debug {
+  border: 1px solid red;
+}
+
+$family-sans-serif: "Titillium Web", BlinkMacSystemFont, -apple-system,
+  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+  "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$link: blueviolet;
+
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+
+$text: $black-ter;
+
+@import "../node_modules/bulma/sass/utilities/functions";
+@import "../node_modules/bulma/sass/utilities/derived-variables";
+@import "../node_modules/bulma/sass/utilities/mixins";
+@import "../node_modules/bulma/sass/utilities/controls";
+@import "../node_modules/bulma/sass/utilities/extends";
+
+@import "../node_modules/bulma/sass/base/_all";
+@import "../node_modules/bulma/sass/elements/_all";
+@import "../node_modules/bulma/sass/form/_all";
+@import "../node_modules/bulma/sass/components/_all";
+@import "../node_modules/bulma/sass/grid/_all";
+@import "../node_modules/bulma/sass/helpers/_all";
+@import "../node_modules/bulma/sass/layout/_all";

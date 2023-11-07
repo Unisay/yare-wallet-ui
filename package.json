@@ -1,0 +1,43 @@
+{
+    "name": "yare-wallet-ui",
+    "version": "1.0.0",
+    "description": "Yare Wallet UI",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "build:css": "node-sass --omit-source-map-url sass/styles.scss dist/css/styles.css",
+        "build:purescript": "spago -P build",
+        "build": "npm run bundle",
+        "bundle:build": "spago build",
+        "bundle:esbuild": "node build/bundle/esbuild.mjs",
+        "bundle": "run-s bundle:build bundle:esbuild",
+        "clean:dist": "rm -rf dist/js/*",
+        "clean:node": "rm -rf node_modules",
+        "clean:purescript": "rm -rf output dce-output",
+        "clean:spago": "rm -rf .spago",
+        "clean": "run-p clean:*",
+        "dev:serve": "node build/dev/esbuild.mjs",
+        "dev": "npm-run-all -s build:purescript build:css -p watch:css dev:serve",
+        "postinstall": "spago install",
+        "start": "node server.mjs",
+        "test": "spago -P test",
+        "watch:css": "npm run build:css -- --watch",
+        "watch:purescript": "spago -P build --watch"
+    },
+    "keywords": [
+        "cardano",
+        "wallet",
+        "yare"
+    ],
+    "author": "Yura Lazarev",
+    "license": "MIT",
+    "devDependencies": {
+        "bulma": "^0.9.4",
+        "esbuild": "^0.19.5",
+        "node-sass": "^9.0.0",
+        "npm-run-all": "^4.1.5"
+    },
+    "dependencies": {}
+}

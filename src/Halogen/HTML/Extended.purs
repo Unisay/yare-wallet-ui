@@ -1,0 +1,264 @@
+module Halogen.HTML.Extended
+  ( module HH
+  , css
+  , safeHref
+  , noHtml
+  , maybeElem
+  , whenElem
+  ) where
+
+import Prelude
+
+import Yare.Data.Route (Route, routeCodec)
+import Data.Maybe (Maybe(..))
+import Halogen.HTML
+  ( class IsProp
+  , AttrName(..)
+  , ClassName(..)
+  , ComponentHTML
+  , ElemName(..)
+  , HTML(..)
+  , IProp
+  , Leaf
+  , Namespace(..)
+  , Node
+  , PlainHTML
+  , PropName(..)
+  , a
+  , a_
+  , abbr
+  , abbr_
+  , address
+  , address_
+  , area
+  , article
+  , article_
+  , aside
+  , aside_
+  , attr
+  , attrNS
+  , audio
+  , audio_
+  , b
+  , b_
+  , base
+  , bdi
+  , bdi_
+  , bdo
+  , bdo_
+  , blockquote
+  , blockquote_
+  , body
+  , body_
+  , br
+  , br_
+  , button
+  , button_
+  , canvas
+  , caption
+  , caption_
+  , cite
+  , cite_
+  , code
+  , code_
+  , col
+  , colgroup
+  , colgroup_
+  , command
+  , datalist
+  , datalist_
+  , dd
+  , dd_
+  , del
+  , del_
+  , details
+  , details_
+  , dfn
+  , dfn_
+  , dialog
+  , dialog_
+  , div
+  , div_
+  , dl
+  , dl_
+  , dt
+  , dt_
+  , element
+  , elementNS
+  , em
+  , em_
+  , embed
+  , embed_
+  , fieldset
+  , fieldset_
+  , figcaption
+  , figcaption_
+  , figure
+  , figure_
+  , footer
+  , footer_
+  , form
+  , form_
+  , fromPlainHTML
+  , h1
+  , h1_
+  , h2
+  , h2_
+  , h3
+  , h3_
+  , h4
+  , h4_
+  , h5
+  , h5_
+  , h6
+  , h6_
+  , handler
+  , head
+  , head_
+  , header
+  , header_
+  , hr
+  , hr_
+  , html
+  , html_
+  , i
+  , i_
+  , iframe
+  , img
+  , input
+  , ins
+  , ins_
+  , kbd
+  , kbd_
+  , keyed
+  , keyedNS
+  , label
+  , label_
+  , lazy
+  , lazy2
+  , lazy3
+  , legend
+  , legend_
+  , li
+  , li_
+  , link
+  , main
+  , main_
+  , map
+  , map_
+  , mark
+  , mark_
+  , memoized
+  , menu
+  , menu_
+  , menuitem
+  , menuitem_
+  , meta
+  , meter
+  , meter_
+  , nav
+  , nav_
+  , noscript
+  , noscript_
+  , object
+  , object_
+  , ol
+  , ol_
+  , optgroup
+  , optgroup_
+  , option
+  , option_
+  , output
+  , output_
+  , p
+  , p_
+  , param
+  , pre
+  , pre_
+  , progress
+  , progress_
+  , prop
+  , q
+  , q_
+  , rp
+  , rp_
+  , rt
+  , rt_
+  , ruby
+  , ruby_
+  , samp
+  , samp_
+  , script
+  , script_
+  , section
+  , section_
+  , select
+  , select_
+  , slot
+  , slot_
+  , small
+  , small_
+  , source
+  , span
+  , span_
+  , strong
+  , strong_
+  , style
+  , style_
+  , sub
+  , sub_
+  , summary
+  , summary_
+  , sup
+  , sup_
+  , table
+  , table_
+  , tbody
+  , tbody_
+  , td
+  , td_
+  , text
+  , textarea
+  , tfoot
+  , tfoot_
+  , th
+  , th_
+  , thead
+  , thead_
+  , time
+  , time_
+  , title
+  , title_
+  , tr
+  , tr_
+  , track
+  , u
+  , u_
+  , ul
+  , ul_
+  , var
+  , var_
+  , video
+  , video_
+  , wbr
+  , withKeys
+  , withKeys_
+  ) as HH
+import Halogen.HTML.Properties as HP
+import Routing.Duplex (print)
+
+css ∷ ∀ r i. String → HH.IProp (class ∷ String | r) i
+css = HP.class_ <<< HH.ClassName
+
+safeHref ∷ ∀ r i. Route → HH.IProp (href ∷ String | r) i
+safeHref = HP.href <<< append "#" <<< print routeCodec
+
+maybeElem ∷ ∀ p i a. Maybe a → (a → HH.HTML p i) → HH.HTML p i
+maybeElem (Just x) f = f x
+maybeElem _ _ = noHtml
+
+whenElem ∷ ∀ p i. Boolean → (Unit → HH.HTML p i) → HH.HTML p i
+whenElem cond f = if cond then f unit else noHtml
+
+noHtml ∷ ∀ p i. HH.HTML p i
+noHtml = HH.text ""
