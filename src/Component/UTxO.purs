@@ -2,13 +2,13 @@ module Yare.Component.UTxO (component) where
 
 import Custom.Prelude hiding (div)
 
-import Cardano.Types (valueLovelace)
+import Cardano.Types (splitTxIn, valueLovelace)
+import Component.Html.Decor as Decor
 import Component.Html.Layout (layout)
 import Data.Array (mapWithIndex)
-import Data.Traversable (traverse)
 import Halogen as H
 import Halogen.HTML.Elements (table, tbody_, thead_)
-import Halogen.HTML.Extended (css, div, div_, noHtml, p_, span, td, td_, text, th, th_, tr_)
+import Halogen.HTML.Extended (css, p_, td, text, th_, tr_)
 import Network.RemoteData (RemoteData(..))
 import Yare.Capability.Resource.UTxO (class HasUTxO, UTxOs, getUTxO)
 import Yare.Data.Route (Route(..))
@@ -30,13 +30,13 @@ component = H.mkComponent
   where
 
   handleAction ∷ ∀ cs. Action → H.HalogenM State Action cs o m Unit
-  handleAction = case _ of
-    Initialize → getUTxO >>= case _ of
-      Nothing → H.put $ Failure "No network info available"
+  handleAction Initialize =
+    getUTxO >>= case _ of
+      Nothing → H.put $ Failure "No UTxO info available"
       Just utxo → H.put $ Success utxo
 
   render ∷ ∀ cs. State → H.ComponentHTML Action cs m
-  render remoteUTxO = layout Network "network" []
+  render remoteUTxO = layout UTxO "UTxO" []
     [ case remoteUTxO of
         NotAsked → p_ [ text "Loading..." ]
         Loading → p_ [ text "Loading..." ]
@@ -51,17 +51,23 @@ component = H.mkComponent
           [ tr_
               [ th_ [ text "#" ]
               , th_ [ text "Address" ]
+              , th_ [ text "Tx Id" ]
+              , th_ [ text "Output Index" ]
               , th_ [ text "Value" ]
               ]
           ]
-      , tbody_ $ utxos # mapWithIndex \index { address, value } →
+      , tbody_ $ utxos # mapWithIndex \index { address, txIn, value } →
           tr_
             let
-              cellClass = "is-size-7 is-family-code"
+              cellClass = "is-family-code"
+              { txId, txIx } = splitTxIn txIn
             in
-              [ th [ css cellClass ] [ text (show index) ]
-              , td [ css cellClass ] [ text $ show address ]
-              , td [ css cellClass ] [ text $ show $ valueLovelace value ]
+              [ td [ css cellClass ] [ text (show index) ]
+              , td [ css cellClass ] [ Decor.address address ]
+              , td [ css cellClass ] [ Decor.txId txId ]
+              , td [ css cellClass ] [ text (show txIx) ]
+              , td [ css cellClass ] [ text (show (valueLovelace value)) ]
               ]
 
       ]
+

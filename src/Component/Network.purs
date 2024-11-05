@@ -3,22 +3,10 @@ module Yare.Component.Network (component) where
 import Custom.Prelude hiding (div)
 
 import Component.Html.Layout (layout)
-import Halogen
-  ( Component
-  , ComponentHTML
-  , HalogenM
-  , defaultEval
-  , mkComponent
-  , mkEval
-  , put
-  )
-import Halogen.HTML.Extended (css, div, p_, text)
+import Halogen (Component, ComponentHTML, HalogenM, defaultEval, mkComponent, mkEval, put)
+import Halogen.HTML.Extended (br_, css, div, h2_, p_, text)
 import Network.RemoteData (RemoteData(..))
-import Yare.Capability.Resource.NetworkInfo
-  ( class HasNetworkInfo
-  , NetworkInfo
-  , getNetworkInfo
-  )
+import Yare.Capability.Resource.NetworkInfo (class HasNetworkInfo, NetworkInfo, getNetworkInfo)
 import Yare.Data.Route (Route(..))
 
 data Action = Initialize
@@ -51,6 +39,12 @@ component = mkComponent
         Failure err → p_ [ text err ]
         Success { chainTip } →
           div [ css "content" ]
-            [ p_ [ text $ "Current slot # " <> show chainTip.slotNo ] ]
+            [ h2_ [ text "Network Tip" ]
+            , p_
+                [ text $ "Slot # " <> show chainTip.slotNo
+                , br_
+                , text $ "Block # " <> show chainTip.blockNo
+                ]
+            ]
     ]
 

@@ -11,7 +11,7 @@ import Control.Monad.Trans.Class (lift)
 import Data.Codec.Argonaut as CA
 import Data.Codec.Argonaut.Record as CAR
 import Halogen (HalogenM)
-import Yare.Api.Endpoint (Endpoint(..))
+import Yare.Api.Endpoint as Endpoint
 import Yare.Api.Request (RequestMethod(..))
 import Yare.Api.Utils as Api
 import Yare.AppM (AppM)
@@ -29,7 +29,7 @@ class Monad m ⇐ HasNetworkInfo m where
 
 instance HasNetworkInfo AppM where
   getNetworkInfo = do
-    mbJson ← Api.mkRequest { endpoint: ChainTip, method: Get }
+    mbJson ← Api.mkRequest { endpoint: Endpoint.ChainTip, method: Get }
     map { chainTip: _ } <$> Api.decode "NetworkInfo"
       ( CAR.object "ChainTip"
           { slotNo: CA.int

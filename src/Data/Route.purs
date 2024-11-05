@@ -11,7 +11,12 @@ import Routing.Duplex.Generic.Syntax ((/))
 import Slug (Slug)
 import Slug as Slug
 
-data Route = Home | UTxO | Transactions | Network
+data Route
+  = Home
+  | UTxO
+  | Transactions
+  | Network
+  | Addresses
 
 derive instance genericRoute ∷ Generic Route _
 derive instance eqRoute ∷ Eq Route
@@ -25,6 +30,7 @@ routeCodec = root $ sum
   , "UTxO": "utxo" / noArgs
   , "Transactions": "txs" / noArgs
   , "Network": "network" / noArgs
+  , "Addresses": "addresses" / noArgs
   }
 
 slug ∷ RouteDuplex' String → RouteDuplex' Slug

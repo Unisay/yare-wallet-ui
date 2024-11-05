@@ -24,19 +24,21 @@ header route headerTitle =
         ]
     , div [ css "level-right" ]
         [ menuButton Home "Home" "home"
-        , menuButton UTxO "Wallets" "wallet"
+        , menuButton UTxO "UTxO" "wallet"
         , menuButton Transactions "Transactions" "list-check"
+        , menuButton Addresses "Addresses" "address-book"
         , menuButton Network "Network" "globe"
         ]
     ]
   where
   menuButton ∷ Route → String → String → HTML w i
   menuButton ref title' icon =
-    if ref == route then text ""
-    else
-      a
-        [ css "level-item button is-large", title title', safeHref ref ]
-        [ span [ css "icon" ] [ i [ css ("fas fa-" <> icon) ] [] ] ]
+    ( if ref == route then
+        div [ css "level-item button is-large", title title' ]
+      else
+        a [ css "level-item button is-large", title title', safeHref ref ]
+    )
+      [ span [ css "icon" ] [ i [ css ("fas fa-" <> icon) ] [] ] ]
 
 body ∷ ∀ w i. Array (HTML w i) → Array (HTML w i) → HTML w i
 body sidebarHtml contentHtml =

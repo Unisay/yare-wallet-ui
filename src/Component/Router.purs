@@ -15,10 +15,14 @@ import Type.Proxy (Proxy(..))
 import Yare.Capability.LogMessages (class LogMessages)
 import Yare.Capability.Navigate (class Navigate, navigate)
 import Yare.Capability.Now (class Now)
+import Yare.Capability.Resource.Addresses (class HasAddresses)
 import Yare.Capability.Resource.NetworkInfo (class HasNetworkInfo)
+import Yare.Capability.Resource.Transactions (class HasTransactions)
 import Yare.Capability.Resource.UTxO (class HasUTxO)
+import Yare.Component.Addresses as Addresses
 import Yare.Component.Home as Home
 import Yare.Component.Network as Network
+import Yare.Component.Transactions as Transactions
 import Yare.Component.UTxO as UTxO
 import Yare.Component.Utils (OpaqueSlot)
 import Yare.Data.Route (Route, routeCodec)
@@ -35,6 +39,8 @@ type ChildSlots =
   ( home ∷ OpaqueSlot Unit
   , utxo ∷ OpaqueSlot Unit
   , network ∷ OpaqueSlot Unit
+  , transactions ∷ OpaqueSlot Unit
+  , addresses ∷ OpaqueSlot Unit
   )
 
 component
@@ -44,6 +50,8 @@ component
   ⇒ Now m
   ⇒ LogMessages m
   ⇒ HasNetworkInfo m
+  ⇒ HasTransactions m
+  ⇒ HasAddresses m
   ⇒ HasUTxO m
   ⇒ Navigate m
   ⇒ H.Component Query Unit Void m
@@ -79,8 +87,10 @@ component = H.mkComponent
       Route.UTxO →
         HH.slot_ (Proxy @"utxo") unit UTxO.component unit
       Route.Transactions →
-        HH.slot_ (Proxy @"home") unit Home.component unit
+        HH.slot_ (Proxy @"transactions") unit Transactions.component unit
       Route.Network →
         HH.slot_ (Proxy @"network") unit Network.component unit
+      Route.Addresses →
+        HH.slot_ (Proxy @"addresses") unit Addresses.component unit
     Nothing →
       HH.div_ [ HH.text "Oh no! That page wasn't found." ]

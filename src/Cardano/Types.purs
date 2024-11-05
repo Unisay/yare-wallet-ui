@@ -8,8 +8,10 @@ import Data.Array as Array
 import Data.Codec ((~))
 import Data.Codec.Argonaut (JsonCodec)
 import Data.Codec.Argonaut as CA
+import Data.Int as Int
 import Data.Newtype (class Newtype, unwrap)
 import Data.Profunctor (dimap)
+import Data.String (Pattern(..))
 import Data.String as String
 import JS.BigInt (BigInt)
 import JS.BigInt as BigInt
@@ -18,6 +20,22 @@ newtype TxIn = TxIn String
 
 instance Show TxIn where
   show (TxIn txIn) = txIn
+
+splitTxIn ∷ TxIn → { txId ∷ TxId, txIx ∷ Int }
+splitTxIn (TxIn txIn) =
+  let
+    { before: txId, after: txIx } = String.splitAt 64 txIn
+  in
+    { txId: TxId txId
+    , txIx: case Int.fromString =<< String.stripPrefix (Pattern "#") txIx of
+        Nothing → -1
+        Just ix → ix
+    }
+
+newtype TxId = TxId String
+
+instance Show TxId where
+  show (TxId txId) = txId
 
 newtype Address = Address String
 
@@ -54,6 +72,9 @@ codecAddress = CA.coercible "Address" CA.string
 
 codecTxIn ∷ JsonCodec TxIn
 codecTxIn = CA.coercible "TxIn" CA.string
+
+codecTxId ∷ JsonCodec TxId
+codecTxId = CA.coercible "TxId" CA.string
 
 codecValue ∷ JsonCodec Value
 codecValue = dimap _.assets { assets: _ } (CA.array codecAssetQuantity)
