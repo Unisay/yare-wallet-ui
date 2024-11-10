@@ -2,7 +2,7 @@ module Yare.Capability.Resource.Scripts where
 
 import Custom.Prelude
 
-import Cardano.Types (ScriptDeployment, codecScriptDeployment)
+import Cardano.Script (ScriptDeployment, codecScriptDeployment)
 import Control.Monad.Trans.Class (lift)
 import Data.Codec.Argonaut (JsonCodec)
 import Data.Codec.Argonaut as CA

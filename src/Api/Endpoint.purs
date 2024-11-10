@@ -13,7 +13,7 @@ import Routing.Duplex.Generic.Syntax ((/))
 data Endpoint
   = Utxo
   | Transactions
-  | ChainTip
+  | Network
   | Scripts
   | Addresses
 
@@ -23,7 +23,7 @@ endpointCodec ∷ RouteDuplex' Endpoint
 endpointCodec = root $ sum
   { "Utxo": "utxo" / noArgs
   , "Transactions": "transactions" / noArgs
-  , "ChainTip": "tip" / noArgs
+  , "Network": "network" / noArgs
   , "Scripts": "scripts" / noArgs
   , "Addresses": "addresses" / noArgs
   }
