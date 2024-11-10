@@ -14,6 +14,7 @@ data Endpoint
   = Utxo
   | Transactions
   | ChainTip
+  | Scripts
   | Addresses
 
 derive instance genericEndpoint ∷ Generic Endpoint _
@@ -23,6 +24,7 @@ endpointCodec = root $ sum
   { "Utxo": "utxo" / noArgs
   , "Transactions": "transactions" / noArgs
   , "ChainTip": "tip" / noArgs
+  , "Scripts": "scripts" / noArgs
   , "Addresses": "addresses" / noArgs
   }
 

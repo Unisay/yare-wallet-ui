@@ -66,7 +66,7 @@ component = mkComponent
       , tbody_ $ submitted # mapWithIndex \index txId →
           tr_
             [ td_ [ text $ show index ]
-            , td_ [ text $ show txId ]
+            , td_ [ Decor.txId txId ]
             ]
       ]
 

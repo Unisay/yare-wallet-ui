@@ -8,6 +8,8 @@ import Data.Array as Array
 import Data.Codec ((~))
 import Data.Codec.Argonaut (JsonCodec)
 import Data.Codec.Argonaut as CA
+import Data.Codec.Argonaut.Record as CAR
+import Data.Codec.Argonaut.Sum as CAS
 import Data.Int as Int
 import Data.Newtype (class Newtype, unwrap)
 import Data.Profunctor (dimap)
@@ -36,6 +38,21 @@ newtype TxId = TxId String
 
 instance Show TxId where
   show (TxId txId) = txId
+
+derive instance newtypeTxId ∷ Newtype TxId _
+
+codecTxId ∷ JsonCodec TxId
+codecTxId = CA.coercible "TxId" CA.string
+
+newtype TxIx = TxIx Int
+
+instance Show TxIx where
+  show (TxIx txIx) = show txIx
+
+derive instance newtypeTxIx ∷ Newtype TxIx _
+
+codecTxIx ∷ JsonCodec TxIx
+codecTxIx = CA.coercible "TxIx" CA.int
 
 newtype Address = Address String
 
@@ -72,9 +89,6 @@ codecAddress = CA.coercible "Address" CA.string
 
 codecTxIn ∷ JsonCodec TxIn
 codecTxIn = CA.coercible "TxIn" CA.string
-
-codecTxId ∷ JsonCodec TxId
-codecTxId = CA.coercible "TxId" CA.string
 
 codecValue ∷ JsonCodec Value
 codecValue = dimap _.assets { assets: _ } (CA.array codecAssetQuantity)
@@ -116,3 +130,40 @@ codecAsset = CA.codec' decode encode
 codecBigInt ∷ JsonCodec BigInt
 codecBigInt =
   CA.prismaticCodec "BigInt" BigInt.fromNumber BigInt.toNumber CA.number
+
+newtype ScriptHash = ScriptHash String
+
+derive instance newtypeScriptHash ∷ Newtype ScriptHash _
+
+codecScriptHash ∷ JsonCodec ScriptHash
+codecScriptHash = CA.coercible "ScriptHash" CA.string
+
+data ScriptStatus
+  = DeploymentInitiated
+  | DeploymentCompleted
+
+renderScriptStatus ∷ ScriptStatus → String
+renderScriptStatus DeploymentInitiated = "deploy-initiated"
+renderScriptStatus DeploymentCompleted = "deploy-completed"
+
+codecScriptStatus ∷ JsonCodec ScriptStatus
+codecScriptStatus = CAS.enumSum renderScriptStatus case _ of
+  "deploy-initiated" → Just DeploymentInitiated
+  "deploy-completed" → Just DeploymentCompleted
+  _ → Nothing
+
+type ScriptDeployment =
+  { scriptHash ∷ ScriptHash
+  , scriptStatus ∷ ScriptStatus
+  , scriptTxId ∷ TxId
+  , scriptTxOut ∷ TxIx
+  }
+
+codecScriptDeployment ∷ JsonCodec ScriptDeployment
+codecScriptDeployment =
+  CAR.object "ScriptDeployment"
+    { scriptHash: codecScriptHash
+    , scriptStatus: codecScriptStatus
+    , scriptTxId: codecTxId
+    , scriptTxOut: codecTxIx
+    }

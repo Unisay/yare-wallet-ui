@@ -2,9 +2,10 @@ module Component.Html.Layout where
 
 import Custom.Prelude hiding (div)
 
-import Halogen.HTML.Extended (HTML, a, css, div, div_, h1, i, nav, safeHref, span, text)
+import Halogen.HTML.Extended (HTML, a, css, div, div_, h1, i, nav, safeHref, span, span_, text)
 import Halogen.HTML.Properties (title)
-import Yare.Data.Route (Route(..))
+import Yare.Data.Route (Route)
+import Yare.Data.Route as Route
 
 layout ∷ ∀ w i. Route → String → Array (HTML w i) → Array (HTML w i) → HTML w i
 layout route title sidebarHtml contentHtml =
@@ -23,22 +24,25 @@ header route headerTitle =
             ]
         ]
     , div [ css "level-right" ]
-        [ menuButton Home "Home" "home"
-        , menuButton UTxO "UTxO" "wallet"
-        , menuButton Transactions "Transactions" "list-check"
-        , menuButton Addresses "Addresses" "address-book"
-        , menuButton Network "Network" "globe"
+        [ menuButton Route.Home "Home" "home"
+        , menuButton Route.UTxO "UTxO" "wallet"
+        , menuButton Route.Transactions "Transactions" "list-check"
+        , menuButton Route.Addresses "Addresses" "address-book"
+        , menuButton Route.Scripts "Scripts" "scroll"
+        , menuButton Route.Network "Network" "globe"
         ]
     ]
   where
   menuButton ∷ Route → String → String → HTML w i
   menuButton ref title' icon =
     ( if ref == route then
-        div [ css "level-item button is-large", title title' ]
+        div [ css "level-item button is-medium", title title' ]
       else
-        a [ css "level-item button is-large", title title', safeHref ref ]
+        a [ css "level-item button is-medium", title title', safeHref ref ]
     )
-      [ span [ css "icon" ] [ i [ css ("fas fa-" <> icon) ] [] ] ]
+      [ span [ css "icon" ] [ i [ css ("fas fa-" <> icon) ] [] ]
+      , span_ [ text title' ]
+      ]
 
 body ∷ ∀ w i. Array (HTML w i) → Array (HTML w i) → HTML w i
 body sidebarHtml contentHtml =

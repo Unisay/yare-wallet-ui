@@ -18,6 +18,7 @@
   , "halogen"
   , "halogen-store"
   , "http-methods"
+  , "integers"
   , "js-bigints"
   , "maybe"
   , "newtype"

@@ -16,6 +16,7 @@ data Route
   | UTxO
   | Transactions
   | Network
+  | Scripts
   | Addresses
 
 derive instance genericRoute ∷ Generic Route _
@@ -30,6 +31,7 @@ routeCodec = root $ sum
   , "UTxO": "utxo" / noArgs
   , "Transactions": "txs" / noArgs
   , "Network": "network" / noArgs
+  , "Scripts": "scripts" / noArgs
   , "Addresses": "addresses" / noArgs
   }
 

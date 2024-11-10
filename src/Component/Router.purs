@@ -17,11 +17,13 @@ import Yare.Capability.Navigate (class Navigate, navigate)
 import Yare.Capability.Now (class Now)
 import Yare.Capability.Resource.Addresses (class HasAddresses)
 import Yare.Capability.Resource.NetworkInfo (class HasNetworkInfo)
+import Yare.Capability.Resource.Scripts (class HasScripts)
 import Yare.Capability.Resource.Transactions (class HasTransactions)
 import Yare.Capability.Resource.UTxO (class HasUTxO)
 import Yare.Component.Addresses as Addresses
 import Yare.Component.Home as Home
 import Yare.Component.Network as Network
+import Yare.Component.Scripts as Scripts
 import Yare.Component.Transactions as Transactions
 import Yare.Component.UTxO as UTxO
 import Yare.Component.Utils (OpaqueSlot)
@@ -41,6 +43,7 @@ type ChildSlots =
   , network ∷ OpaqueSlot Unit
   , transactions ∷ OpaqueSlot Unit
   , addresses ∷ OpaqueSlot Unit
+  , scripts ∷ OpaqueSlot Unit
   )
 
 component
@@ -52,6 +55,7 @@ component
   ⇒ HasNetworkInfo m
   ⇒ HasTransactions m
   ⇒ HasAddresses m
+  ⇒ HasScripts m
   ⇒ HasUTxO m
   ⇒ Navigate m
   ⇒ H.Component Query Unit Void m
@@ -92,5 +96,7 @@ component = H.mkComponent
         HH.slot_ (Proxy @"network") unit Network.component unit
       Route.Addresses →
         HH.slot_ (Proxy @"addresses") unit Addresses.component unit
+      Route.Scripts →
+        HH.slot_ (Proxy @"scripts") unit Scripts.component unit
     Nothing →
       HH.div_ [ HH.text "Oh no! That page wasn't found." ]
