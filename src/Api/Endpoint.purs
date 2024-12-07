@@ -24,7 +24,7 @@ endpointCodec = root $ sum
   { "Utxo": "utxo" / noArgs
   , "Transactions": "transactions" / noArgs
   , "Network": "network" / noArgs
-  , "Scripts": "scripts" / noArgs
+  , "Scripts": "script" / noArgs
   , "Addresses": "addresses" / noArgs
   }
 

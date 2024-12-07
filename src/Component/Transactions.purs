@@ -5,6 +5,7 @@ import Custom.Prelude hiding (div)
 import Cardano.Types (TxId)
 import Component.Html.Decor as Decor
 import Component.Html.Layout (layout)
+import Component.Html.Sidebar (sidebar)
 import Data.Array (mapWithIndex)
 import Data.Array as Array
 import Halogen (Component, ComponentHTML, HalogenM, defaultEval, mkComponent, mkEval, put)
@@ -36,7 +37,7 @@ component = mkComponent
       Just transactions → put $ Success transactions
 
   render ∷ ∀ cs. State → ComponentHTML Action cs m
-  render remoteNetworkInfo = layout Transactions "transactions" []
+  render remoteNetworkInfo = layout "transactions" (sidebar Transactions)
     [ case remoteNetworkInfo of
         NotAsked → p_ [ text "Loading..." ]
         Loading → p_ [ text "Loading..." ]

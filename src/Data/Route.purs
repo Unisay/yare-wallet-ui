@@ -18,6 +18,7 @@ data Route
   | Network
   | Scripts
   | Addresses
+  | NftMint
 
 derive instance genericRoute ∷ Generic Route _
 derive instance eqRoute ∷ Eq Route
@@ -33,6 +34,7 @@ routeCodec = root $ sum
   , "Network": "network" / noArgs
   , "Scripts": "scripts" / noArgs
   , "Addresses": "addresses" / noArgs
+  , "NftMint": "nft" / "mint" / noArgs
   }
 
 slug ∷ RouteDuplex' String → RouteDuplex' Slug

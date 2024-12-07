@@ -5,6 +5,7 @@ import Custom.Prelude hiding (div)
 import Cardano.Block (BlockRef)
 import Component.Html.Decor as Decor
 import Component.Html.Layout (layout)
+import Component.Html.Sidebar (sidebar)
 import Halogen (Component, ComponentHTML, HalogenM, defaultEval, mkComponent, mkEval, put)
 import Halogen.HTML.Extended (br_, css, div, h2_, p_, text)
 import Network.RemoteData (RemoteData(..))
@@ -35,7 +36,7 @@ component = mkComponent
 
   render ∷ ∀ cs. State → ComponentHTML Action cs m
   render remoteNetworkInfo =
-    layout Network "network" []
+    layout "network" (sidebar Network)
       [ case remoteNetworkInfo of
           NotAsked → p_ [ text "Loading..." ]
           Loading → p_ [ text "Loading..." ]

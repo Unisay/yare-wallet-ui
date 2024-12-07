@@ -5,6 +5,7 @@ import Custom.Prelude hiding (div)
 import Cardano.Types (splitTxIn, valueLovelace)
 import Component.Html.Decor as Decor
 import Component.Html.Layout (layout)
+import Component.Html.Sidebar (sidebar)
 import Data.Array (mapWithIndex)
 import Halogen as H
 import Halogen.HTML.Elements (table, tbody_, thead_)
@@ -36,7 +37,7 @@ component = H.mkComponent
       Just utxo → H.put $ Success utxo
 
   render ∷ ∀ cs. State → H.ComponentHTML Action cs m
-  render remoteUTxO = layout UTxO "UTxO" []
+  render remoteUTxO = layout "UTxO" (sidebar UTxO)
     [ case remoteUTxO of
         NotAsked → p_ [ text "Loading..." ]
         Loading → p_ [ text "Loading..." ]

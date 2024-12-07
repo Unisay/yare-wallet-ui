@@ -4,6 +4,7 @@ import Custom.Prelude hiding (div)
 
 import Component.Html.Decor as Decor
 import Component.Html.Layout (layout)
+import Component.Html.Sidebar (sidebar)
 import Data.Array (mapWithIndex)
 import Halogen (Component, ComponentHTML, HalogenM, defaultEval, mkComponent, mkEval, put)
 import Halogen.HTML.Extended (css, div, p_, table, tbody_, td_, text, th_, thead_, tr_)
@@ -34,7 +35,7 @@ component = mkComponent
       Just addresses → put $ Success addresses
 
   render ∷ ∀ cs. State → ComponentHTML Action cs m
-  render remoteNetworkInfo = layout Addresses "addresses" []
+  render remoteNetworkInfo = layout "addresses" (sidebar Addresses) 
     [ case remoteNetworkInfo of
         NotAsked → p_ [ text "Loading..." ]
         Loading → p_ [ text "Loading..." ]

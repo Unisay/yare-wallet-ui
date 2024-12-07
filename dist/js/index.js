@@ -350,11 +350,11 @@
 
   // output/Data.Ord/foreign.js
   var unsafeCompareImpl = function(lt) {
-    return function(eq5) {
+    return function(eq4) {
       return function(gt) {
         return function(x) {
           return function(y) {
-            return x < y ? lt : x === y ? eq5 : gt;
+            return x < y ? lt : x === y ? eq4 : gt;
           };
         };
       };
@@ -776,7 +776,7 @@
     };
   };
   var eqMaybe = function(dictEq) {
-    var eq5 = eq(dictEq);
+    var eq4 = eq(dictEq);
     return {
       eq: function(x) {
         return function(y) {
@@ -785,7 +785,7 @@
           }
           ;
           if (x instanceof Just && y instanceof Just) {
-            return eq5(x.value0)(y.value0);
+            return eq4(x.value0)(y.value0);
           }
           ;
           return false;
@@ -1135,13 +1135,13 @@
     return v.value0;
   };
   var eqTuple = function(dictEq) {
-    var eq5 = eq(dictEq);
+    var eq4 = eq(dictEq);
     return function(dictEq1) {
       var eq13 = eq(dictEq1);
       return {
         eq: function(x) {
           return function(y) {
-            return eq5(x.value0)(y.value0) && eq13(x.value1)(y.value1);
+            return eq4(x.value0)(y.value0) && eq13(x.value1)(y.value1);
           };
         }
       };
@@ -7838,6 +7838,8 @@
   var h2 = /* @__PURE__ */ element2("h2");
   var h2_ = /* @__PURE__ */ h2([]);
   var i = /* @__PURE__ */ element2("i");
+  var li = /* @__PURE__ */ element2("li");
+  var li_ = /* @__PURE__ */ li([]);
   var nav = /* @__PURE__ */ element2("nav");
   var p = /* @__PURE__ */ element2("p");
   var p_ = /* @__PURE__ */ p([]);
@@ -7854,12 +7856,14 @@
   var thead_ = /* @__PURE__ */ thead([]);
   var tr = /* @__PURE__ */ element2("tr");
   var tr_ = /* @__PURE__ */ tr([]);
+  var ul = /* @__PURE__ */ element2("ul");
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
   var br = function(props) {
     return element2("br")(props)([]);
   };
   var br_ = /* @__PURE__ */ br([]);
+  var aside = /* @__PURE__ */ element2("aside");
   var a = /* @__PURE__ */ element2("a");
 
   // output/Halogen.HTML.Properties/index.js
@@ -12813,6 +12817,11 @@
       return "Addresses";
     }
   };
+  var NftMintIsSymbol = {
+    reflectSymbol: function() {
+      return "NftMint";
+    }
+  };
   var gsep2 = /* @__PURE__ */ gsep(/* @__PURE__ */ gsepStringRoute(gRouteNoArguments));
   var Home = /* @__PURE__ */ function() {
     function Home2() {
@@ -12856,6 +12865,13 @@
     Addresses3.value = new Addresses3();
     return Addresses3;
   }();
+  var NftMint = /* @__PURE__ */ function() {
+    function NftMint2() {
+    }
+    ;
+    NftMint2.value = new NftMint2();
+    return NftMint2;
+  }();
   var genericRoute = {
     to: function(x) {
       if (x instanceof Inl) {
@@ -12878,11 +12894,15 @@
         return Scripts.value;
       }
       ;
-      if (x instanceof Inr && (x.value0 instanceof Inr && (x.value0.value0 instanceof Inr && (x.value0.value0.value0 instanceof Inr && x.value0.value0.value0.value0 instanceof Inr)))) {
+      if (x instanceof Inr && (x.value0 instanceof Inr && (x.value0.value0 instanceof Inr && (x.value0.value0.value0 instanceof Inr && (x.value0.value0.value0.value0 instanceof Inr && x.value0.value0.value0.value0.value0 instanceof Inl))))) {
         return Addresses.value;
       }
       ;
-      throw new Error("Failed pattern match at Yare.Data.Route (line 22, column 1 - line 22, column 47): " + [x.constructor.name]);
+      if (x instanceof Inr && (x.value0 instanceof Inr && (x.value0.value0 instanceof Inr && (x.value0.value0.value0 instanceof Inr && (x.value0.value0.value0.value0 instanceof Inr && x.value0.value0.value0.value0.value0 instanceof Inr))))) {
+        return NftMint.value;
+      }
+      ;
+      throw new Error("Failed pattern match at Yare.Data.Route (line 23, column 1 - line 23, column 47): " + [x.constructor.name]);
     },
     from: function(x) {
       if (x instanceof Home) {
@@ -12906,19 +12926,24 @@
       }
       ;
       if (x instanceof Addresses) {
-        return new Inr(new Inr(new Inr(new Inr(new Inr(NoArguments.value)))));
+        return new Inr(new Inr(new Inr(new Inr(new Inr(new Inl(NoArguments.value))))));
       }
       ;
-      throw new Error("Failed pattern match at Yare.Data.Route (line 22, column 1 - line 22, column 47): " + [x.constructor.name]);
+      if (x instanceof NftMint) {
+        return new Inr(new Inr(new Inr(new Inr(new Inr(new Inr(NoArguments.value))))));
+      }
+      ;
+      throw new Error("Failed pattern match at Yare.Data.Route (line 23, column 1 - line 23, column 47): " + [x.constructor.name]);
     }
   };
-  var routeCodec = /* @__PURE__ */ root(/* @__PURE__ */ sum2(genericRoute)(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(HomeIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(UTxOIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(TransactionsIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(NetworkIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(ScriptsIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteConstructor(AddressesIsSymbol)()(gRouteNoArguments)))))))({
+  var routeCodec = /* @__PURE__ */ root(/* @__PURE__ */ sum2(genericRoute)(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(HomeIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(UTxOIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(TransactionsIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(NetworkIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(ScriptsIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteSum(/* @__PURE__ */ gRouteConstructor(AddressesIsSymbol)()(gRouteNoArguments))(/* @__PURE__ */ gRouteConstructor(NftMintIsSymbol)()(gRouteNoArguments))))))))({
     Home: noArgs,
     UTxO: /* @__PURE__ */ gsep2("utxo")(noArgs),
     Transactions: /* @__PURE__ */ gsep2("txs")(noArgs),
     Network: /* @__PURE__ */ gsep2("network")(noArgs),
     Scripts: /* @__PURE__ */ gsep2("scripts")(noArgs),
-    Addresses: /* @__PURE__ */ gsep2("addresses")(noArgs)
+    Addresses: /* @__PURE__ */ gsep2("addresses")(noArgs),
+    NftMint: /* @__PURE__ */ gsep2("nft")(/* @__PURE__ */ gsep2("mint")(noArgs))
   }));
   var eqRoute = {
     eq: function(x) {
@@ -12944,6 +12969,10 @@
         }
         ;
         if (x instanceof Addresses && y instanceof Addresses) {
+          return true;
+        }
+        ;
+        if (x instanceof NftMint && y instanceof NftMint) {
           return true;
         }
         ;
@@ -13489,7 +13518,7 @@
     Utxo: /* @__PURE__ */ gsep3("utxo")(noArgs),
     Transactions: /* @__PURE__ */ gsep3("transactions")(noArgs),
     Network: /* @__PURE__ */ gsep3("network")(noArgs),
-    Scripts: /* @__PURE__ */ gsep3("scripts")(noArgs),
+    Scripts: /* @__PURE__ */ gsep3("script")(noArgs),
     Addresses: /* @__PURE__ */ gsep3("addresses")(noArgs)
   }));
 
@@ -15062,39 +15091,36 @@
   };
 
   // output/Component.Html.Layout/index.js
-  var eq4 = /* @__PURE__ */ eq(eqRoute);
-  var header2 = function(route) {
-    return function(headerTitle) {
-      var menuButton = function(ref2) {
-        return function(title$prime) {
-          return function(icon) {
-            return function() {
-              var $2 = eq4(ref2)(route);
-              if ($2) {
-                return div2([css("level-item button is-medium"), title2(title$prime)]);
-              }
-              ;
-              return a([css("level-item button is-medium"), title2(title$prime), safeHref(ref2)]);
-            }()([span3([css("icon")])([i([css("fas fa-" + icon)])([])]), span_([text5(title$prime)])]);
-          };
-        };
-      };
-      return nav([css("level m-4")])([div2([css("level-left")])([h1([css("is-size-1")])([span3([css("yare px-4")])([text5("Y're")]), text5(" @ " + headerTitle)])]), div2([css("level-right")])([menuButton(Home.value)("Home")("home"), menuButton(UTxO.value)("UTxO")("wallet"), menuButton(Transactions.value)("Transactions")("list-check"), menuButton(Addresses.value)("Addresses")("address-book"), menuButton(Scripts.value)("Scripts")("scroll"), menuButton(Network.value)("Network")("globe")])]);
-    };
+  var header2 = function(headerTitle) {
+    return nav([css("level m-4")])([div2([css("level-left")])([h1([css("is-size-1")])([span3([css("yare px-4")])([text5("Y're")]), text5(" @ " + headerTitle)])])]);
   };
   var body2 = function(sidebarHtml) {
     return function(contentHtml) {
-      return div2([css("columns")])([div2([css("column is-narrow")])(sidebarHtml), div2([css("column")])(contentHtml)]);
+      return div2([css("columns")])([div2([css("column is-narrow")])([div2([css("box")])(sidebarHtml)]), div2([css("column")])(contentHtml)]);
     };
   };
-  var layout = function(route) {
-    return function(title5) {
-      return function(sidebarHtml) {
-        return function(contentHtml) {
-          return div_([header2(route)(title5), body2(sidebarHtml)(contentHtml)]);
+  var layout = function(title5) {
+    return function(sidebarHtml) {
+      return function(contentHtml) {
+        return div_([header2(title5), body2(sidebarHtml)(contentHtml)]);
+      };
+    };
+  };
+
+  // output/Component.Html.Sidebar/index.js
+  var sidebar = function(_route) {
+    var menuSection = function(sectionTitle) {
+      return p([css("menu-label")])([text5(sectionTitle)]);
+    };
+    var menuList = ul([css("menu-list")]);
+    var menuButton = function(ref2) {
+      return function(title$prime) {
+        return function(icon) {
+          return li_([a([css("is-medium"), title2(title$prime), safeHref(ref2)])([span3([css("icon")])([i([css("fas fa-" + icon)])([])]), span_([text5(title$prime)])])]);
         };
       };
     };
+    return [aside([css("menu")])([menuSection("General"), menuList([menuButton(Home.value)("Home")("home"), menuButton(UTxO.value)("UTxO")("wallet"), menuButton(Transactions.value)("Transactions")("list-check"), menuButton(Addresses.value)("Addresses")("address-book"), menuButton(Scripts.value)("Scripts")("scroll"), menuButton(Network.value)("Network")("globe")]), menuSection("NFT"), menuList([menuButton(NftMint.value)("Mint")("certificate")]), menuSection("Auction"), menuList([])])];
   };
 
   // output/Network.RemoteData/index.js
@@ -15154,7 +15180,7 @@
       })(addresses))])]);
     };
     var render = function(remoteNetworkInfo) {
-      return layout(Addresses.value)("addresses")([])([function() {
+      return layout("addresses")(sidebar(Addresses.value))([function() {
         if (remoteNetworkInfo instanceof NotAsked) {
           return p_([text5("Loading...")]);
         }
@@ -15171,7 +15197,7 @@
           return renderAddresses(remoteNetworkInfo.value0);
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Addresses (line 38, column 7 - line 42, column 54): " + [remoteNetworkInfo.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Addresses (line 39, column 7 - line 43, column 54): " + [remoteNetworkInfo.constructor.name]);
       }()]);
     };
     var handleAction = function(v) {
@@ -15184,7 +15210,7 @@
           return put4(new Success2(v1.value0));
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Addresses (line 32, column 35 - line 34, column 47): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Addresses (line 33, column 35 - line 35, column 47): " + [v1.constructor.name]);
       });
     };
     return mkComponent({
@@ -15203,7 +15229,7 @@
   // output/Yare.Component.Home/index.js
   var component2 = function(dictNavigate) {
     var render = function(v) {
-      return layout(Home.value)("home")([])([p_([text5("You can visit "), a([safeHref(Network.value)])([text5("Network information page")])])]);
+      return layout("home")(sidebar(Home.value))([p_([text5("You can visit "), a([safeHref(Network.value)])([text5("Network information page")])])]);
     };
     return mkComponent({
       initialState: $$const(unit),
@@ -15230,7 +15256,7 @@
       return p_([slotNo(v.slotNo), br_, blockNo(v.blockNo), br_, block(v.headerHash)]);
     };
     var render = function(remoteNetworkInfo) {
-      return layout(Network.value)("network")([])([function() {
+      return layout("network")(sidebar(Network.value))([function() {
         if (remoteNetworkInfo instanceof NotAsked) {
           return p_([text5("Loading...")]);
         }
@@ -15254,7 +15280,7 @@
           }())])]);
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Network (line 39, column 9 - line 58, column 16): " + [remoteNetworkInfo.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Network (line 40, column 9 - line 59, column 16): " + [remoteNetworkInfo.constructor.name]);
       }()]);
     };
     var handleAction = function(v) {
@@ -15267,7 +15293,7 @@
           return put5(new Success2(v1.value0));
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Network (line 32, column 37 - line 34, column 51): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Network (line 33, column 37 - line 35, column 51): " + [v1.constructor.name]);
       });
     };
     return mkComponent({
@@ -15305,7 +15331,7 @@
           return [text5("Deployment Completed")];
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Scripts (line 73, column 5 - line 75, column 60): " + [status.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Scripts (line 74, column 5 - line 76, column 60): " + [status.constructor.name]);
       }());
     };
     var renderScripts = function(scripts) {
@@ -15316,7 +15342,7 @@
       })(scripts))])]);
     };
     var render = function(remoteNetworkInfo) {
-      return layout(Scripts.value)("Scripts")([])([function() {
+      return layout("Scripts")(sidebar(Scripts.value))([function() {
         if (remoteNetworkInfo instanceof NotAsked) {
           return p_([text5("Loading...")]);
         }
@@ -15333,7 +15359,7 @@
           return renderScripts(remoteNetworkInfo.value0);
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Scripts (line 39, column 7 - line 43, column 48): " + [remoteNetworkInfo.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Scripts (line 40, column 7 - line 44, column 48): " + [remoteNetworkInfo.constructor.name]);
       }()]);
     };
     var handleAction = function(v) {
@@ -15346,7 +15372,7 @@
           return put6(new Success2(v1.value0));
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Scripts (line 33, column 33 - line 35, column 43): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Scripts (line 34, column 33 - line 36, column 43): " + [v1.constructor.name]);
       });
     };
     return mkComponent({
@@ -15397,7 +15423,7 @@
       return div2([css("content")])([renderSubmitted(v.submitted), renderInLedger(v.inLedger)]);
     };
     var render = function(remoteNetworkInfo) {
-      return layout(Transactions.value)("transactions")([])([function() {
+      return layout("transactions")(sidebar(Transactions.value))([function() {
         if (remoteNetworkInfo instanceof NotAsked) {
           return p_([text5("Loading...")]);
         }
@@ -15414,7 +15440,7 @@
           return renderTransactions(remoteNetworkInfo.value0);
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Transactions (line 40, column 7 - line 44, column 63): " + [remoteNetworkInfo.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Transactions (line 41, column 7 - line 45, column 63): " + [remoteNetworkInfo.constructor.name]);
       }()]);
     };
     var handleAction = function(v) {
@@ -15427,7 +15453,7 @@
           return put7(new Success2(v1.value0));
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.Transactions (line 34, column 38 - line 36, column 53): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.Transactions (line 35, column 38 - line 37, column 53): " + [v1.constructor.name]);
       });
     };
     return mkComponent({
@@ -15468,7 +15494,7 @@
       })(utxos))]);
     };
     var render = function(remoteUTxO) {
-      return layout(UTxO.value)("UTxO")([])([function() {
+      return layout("UTxO")(sidebar(UTxO.value))([function() {
         if (remoteUTxO instanceof NotAsked) {
           return p_([text5("Loading...")]);
         }
@@ -15485,7 +15511,7 @@
           return renderUtxo(remoteUTxO.value0);
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.UTxO (line 40, column 7 - line 44, column 41): " + [remoteUTxO.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.UTxO (line 41, column 7 - line 45, column 41): " + [remoteUTxO.constructor.name]);
       }()]);
     };
     var handleAction = function(v) {
@@ -15498,7 +15524,7 @@
           return put8(new Success2(v1.value0));
         }
         ;
-        throw new Error("Failed pattern match at Yare.Component.UTxO (line 34, column 17 - line 36, column 39): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at Yare.Component.UTxO (line 35, column 17 - line 37, column 39): " + [v1.constructor.name]);
       });
     };
     return mkComponent({
