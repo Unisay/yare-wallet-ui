@@ -11,3 +11,4 @@ class Monad m ⇐ Navigate m where
 
 instance navigateHalogenM ∷ Navigate m ⇒ Navigate (HalogenM st act slots msg m) where
   navigate = lift <<< navigate
+

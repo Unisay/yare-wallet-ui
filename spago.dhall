@@ -17,6 +17,7 @@
   , "formatters"
   , "halogen"
   , "halogen-store"
+  , "halogen-subscriptions"
   , "http-methods"
   , "integers"
   , "js-bigints"
@@ -32,6 +33,8 @@
   , "slug"
   , "strings"
   , "transformers"
+  , "unicode"
+  , "variant"
   , "web-html"
   ]
 , packages = ./packages.dhall

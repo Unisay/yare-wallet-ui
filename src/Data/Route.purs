@@ -18,12 +18,20 @@ data Route
   | Network
   | Scripts
   | Addresses
-  | NftMint
+  | Nft NftRoute
 
 derive instance genericRoute ∷ Generic Route _
 derive instance eqRoute ∷ Eq Route
 derive instance ordRoute ∷ Ord Route
 instance showRoute ∷ Show Route where
+  show = genericShow
+
+data NftRoute = Mint
+
+derive instance genericNftRoute ∷ Generic NftRoute _
+derive instance eqNftRoute ∷ Eq NftRoute
+derive instance ordNftRoute ∷ Ord NftRoute
+instance showNftRoute ∷ Show NftRoute where
   show = genericShow
 
 routeCodec ∷ RouteDuplex' Route
@@ -34,8 +42,11 @@ routeCodec = root $ sum
   , "Network": "network" / noArgs
   , "Scripts": "scripts" / noArgs
   , "Addresses": "addresses" / noArgs
-  , "NftMint": "nft" / "mint" / noArgs
+  , "Nft": "nft" / nftRouteCodec
   }
+
+nftRouteCodec ∷ RouteDuplex' NftRoute
+nftRouteCodec = sum { "Mint": "mint" / noArgs }
 
 slug ∷ RouteDuplex' String → RouteDuplex' Slug
 slug = as Slug.toString (Slug.parse >>> note "Bad slug")

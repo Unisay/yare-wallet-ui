@@ -2,18 +2,26 @@ module Yare.Capability.LogMessages where
 
 import Custom.Prelude
 
-import Yare.Capability.Now (class Now)
-import Yare.Data.Log (Log, LogReason(..), mkLog)
 import Control.Monad.Trans.Class (lift)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
+import Effect (Effect)
+import Effect.Class.Console as Console
 import Halogen (HalogenM)
+import Yare.Capability.Now (class Now)
+import Yare.Data.Log (Log, LogReason(..), mkLog)
+import Yare.Data.Log as Log
 
 class Monad m ⇐ LogMessages m where
   logMessage ∷ Log → m Unit
 
+instance logMessagesEffect ∷ LogMessages Effect where
+  logMessage = Console.log <<< Log.message
+
 -- | This instance lets us avoid having to use `lift` when we use these functions in a component.
-instance logMessagesHalogenM ∷ LogMessages m ⇒ LogMessages (HalogenM st act slots msg m) where
+instance logMessagesHalogenM ∷
+  LogMessages m ⇒
+  LogMessages (HalogenM st act slots msg m) where
   logMessage = lift <<< logMessage
 
 -- | Next, we'll provide a few helper functions to help users easily create and dispatch logs

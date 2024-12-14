@@ -5,10 +5,13 @@ import Custom.Prelude
 import Data.Either (hush)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Effect.Aff.Class (class MonadAff)
+import Event as Event
+import Event.Handler (onMintingInitiated)
 import Halogen (liftEffect)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.Store.Monad (class MonadStore)
+import Halogen.Subscription as HS
 import Routing.Duplex as RD
 import Routing.Hash (getHash)
 import Type.Proxy (Proxy(..))
@@ -23,6 +26,7 @@ import Yare.Capability.Resource.UTxO (class HasUTxO)
 import Yare.Component.Addresses as Addresses
 import Yare.Component.Home as Home
 import Yare.Component.Network as Network
+import Yare.Component.Nft as Nft
 import Yare.Component.Scripts as Scripts
 import Yare.Component.Transactions as Transactions
 import Yare.Component.UTxO as UTxO
@@ -33,7 +37,14 @@ import Yare.Store as Store
 
 data Query a = Navigate Route a
 
-type State = { route ∷ Maybe Route }
+type Input = Unit
+
+type Output = Void
+
+type State =
+  { route ∷ Maybe Route
+  , mintingInitiated ∷ Maybe (HS.SubscribeIO Event.MintingInitiated)
+  }
 
 data Action = Initialize
 
@@ -44,6 +55,7 @@ type ChildSlots =
   , transactions ∷ OpaqueSlot Unit
   , addresses ∷ OpaqueSlot Unit
   , scripts ∷ OpaqueSlot Unit
+  , nft_mint ∷ OpaqueSlot Unit
   )
 
 component
@@ -58,9 +70,9 @@ component
   ⇒ HasScripts m
   ⇒ HasUTxO m
   ⇒ Navigate m
-  ⇒ H.Component Query Unit Void m
+  ⇒ H.Component Query Input Output m
 component = H.mkComponent
-  { initialState: \_input → { route: Nothing }
+  { initialState: \_input → { route: Nothing, mintingInitiated: Nothing }
   , render
   , eval: H.mkEval $ H.defaultEval
       { handleQuery = handleQuery
@@ -70,12 +82,17 @@ component = H.mkComponent
   }
   where
   handleAction ∷ Action → H.HalogenM State Action ChildSlots Void m Unit
-  handleAction = case _ of
-    Initialize → do
-      initialRoute ← hush <<< (RD.parse routeCodec) <$> liftEffect getHash
-      navigate $ fromMaybe Route.Home initialRoute
+  handleAction Initialize = initialize
 
-  handleQuery ∷ ∀ a. Query a → H.HalogenM State Action ChildSlots Void m (Maybe a)
+  initialize ∷ H.HalogenM _ _ _ _ m Unit
+  initialize = do
+    initialRoute ← hush <<< RD.parse routeCodec <$> liftEffect getHash
+    navigate $ fromMaybe Route.Home initialRoute
+    mintingInitiated ← H.liftEffect HS.create
+    void $ liftEffect $ HS.subscribe mintingInitiated.emitter onMintingInitiated
+    H.modify_ _ { mintingInitiated = Just mintingInitiated }
+
+  handleQuery ∷ ∀ a. Query a → H.HalogenM _ _ _ _ m (Maybe a)
   handleQuery = case _ of
     Navigate dest a → do
       { route } ← H.get
@@ -84,7 +101,7 @@ component = H.mkComponent
       pure (Just a)
 
   render ∷ State → H.ComponentHTML Action ChildSlots m
-  render { route } = case route of
+  render { route, mintingInitiated } = case route of
     Just r → case r of
       Route.Home →
         HH.slot_ (Proxy @"home") unit Home.component unit
@@ -98,5 +115,10 @@ component = H.mkComponent
         HH.slot_ (Proxy @"addresses") unit Addresses.component unit
       Route.Scripts →
         HH.slot_ (Proxy @"scripts") unit Scripts.component unit
+      Route.Nft Route.Mint →
+        case mintingInitiated of
+          Nothing → HH.text "Initializing..."
+          Just { listener } →
+            HH.slot_ (Proxy @"nft_mint") unit Nft.component listener
     Nothing →
       HH.div_ [ HH.text "Oh no! That page wasn't found." ]

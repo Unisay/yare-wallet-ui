@@ -21,7 +21,7 @@ sidebar _route =
           ]
       , menuSection "NFT"
       , menuList
-          [ menuButton Route.NftMint "Mint" "certificate"]
+          [ menuButton (Route.Nft Route.Mint) "Mint" "certificate"]
       , menuSection "Auction"
       , menuList
           []
