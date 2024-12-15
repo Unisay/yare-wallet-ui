@@ -32,9 +32,9 @@ class Monad m ⇐ HasUTxO m where
   getUTxO ∷ m (Maybe UTxOs)
 
 instance HasUTxO AppM where
-  getUTxO = do
-    mbJson ← Api.mkRequest { endpoint: Utxo, method: Get }
-    Api.decode "UTxO" (CA.array codecUtxo) mbJson
+  getUTxO =
+    Api.mkRequest { endpoint: Utxo, method: Get } >>=
+      Api.handleResponseErrors (CA.array codecUtxo) hush
 
 instance HasUTxO m ⇒ HasUTxO (HalogenM st act slots msg m) where
   getUTxO = lift <| getUTxO

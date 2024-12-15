@@ -19,18 +19,19 @@ import Yare.AppM (AppM)
 type NetworkInfo = { lastIndexed ∷ BlockRef, networkTip ∷ BlockRef }
 
 codecNetworkInfo ∷ JsonCodec NetworkInfo
-codecNetworkInfo = CAR.object "NetworkInfo"
-  { lastIndexed: codecBlockRef
-  , networkTip: codecBlockRef
-  }
+codecNetworkInfo =
+  CAR.object "NetworkInfo"
+    { lastIndexed: codecBlockRef
+    , networkTip: codecBlockRef
+    }
 
 class Monad m ⇐ HasNetworkInfo m where
   getNetworkInfo ∷ m (Maybe NetworkInfo)
 
 instance HasNetworkInfo AppM where
-  getNetworkInfo = do
-    mbJson ← Api.mkRequest { endpoint: Endpoint.Network, method: Get }
-    Api.decode "NetworkInfo" codecNetworkInfo mbJson
+  getNetworkInfo =
+    Api.mkRequest { endpoint: Endpoint.Network, method: Get }
+      >>= Api.handleResponseErrors codecNetworkInfo hush
 
 instance HasNetworkInfo m ⇒ HasNetworkInfo (HalogenM st act slots msg m) where
   getNetworkInfo = lift <| getNetworkInfo

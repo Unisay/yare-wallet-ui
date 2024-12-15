@@ -21,9 +21,9 @@ class Monad m ⇐ HasScripts m where
   getScripts ∷ m (Maybe Scripts)
 
 instance HasScripts AppM where
-  getScripts = do
-    mbJson ← Api.mkRequest { endpoint: Endpoint.Scripts, method: Get }
-    Api.decode "Scripts" codecScripts mbJson
+  getScripts =
+    Api.mkRequest { endpoint: Endpoint.Scripts, method: Get } >>=
+      Api.handleResponseErrors codecScripts hush
 
 instance HasScripts m ⇒ HasScripts (HalogenM st act slots msg m) where
   getScripts = lift <| getScripts

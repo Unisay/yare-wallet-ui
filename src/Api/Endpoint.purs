@@ -16,6 +16,7 @@ data Endpoint
   | Network
   | Scripts
   | Addresses
+  | NftMint
 
 derive instance genericEndpoint ∷ Generic Endpoint _
 
@@ -26,5 +27,6 @@ endpointCodec = root $ sum
   , "Network": "network" / noArgs
   , "Scripts": "script" / noArgs
   , "Addresses": "addresses" / noArgs
+  , "NftMint": "nft" / "mint" / noArgs
   }
 

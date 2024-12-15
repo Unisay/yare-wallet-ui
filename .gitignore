@@ -5,6 +5,7 @@ node_modules/
 output/
 output-es/
 generated-docs/
+.vscode/
 .psc-package/
 .psc*
 .purs*

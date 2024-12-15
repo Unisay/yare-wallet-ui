@@ -28,9 +28,9 @@ class Monad m ⇐ HasTransactions m where
   getTransactions ∷ m (Maybe Transactions)
 
 instance HasTransactions AppM where
-  getTransactions = do
-    mbJson ← Api.mkRequest { endpoint: Endpoint.Transactions, method: Get }
-    Api.decode "Transactions" codecTransactions mbJson
+  getTransactions = 
+    Api.mkRequest { endpoint: Endpoint.Transactions, method: Get } >>=
+      Api.handleResponseErrors codecTransactions hush
 
 instance HasTransactions m ⇒ HasTransactions (HalogenM st act slots msg m) where
   getTransactions = lift <| getTransactions

@@ -12,7 +12,7 @@ import Yare.Capability.Now (class Now)
 import Yare.Data.Log (Log, LogReason(..), mkLog)
 import Yare.Data.Log as Log
 
-class Monad m ⇐ LogMessages m where
+class Now m ⇐ LogMessages m where
   logMessage ∷ Log → m Unit
 
 instance logMessagesEffect ∷ LogMessages Effect where
@@ -29,27 +29,27 @@ instance logMessagesHalogenM ∷
 -- | so that we've got less to remember later on.
 
 -- | Log a message to given a particular `LogType`
-log ∷ ∀ m. LogMessages m ⇒ Now m ⇒ LogReason → String → m Unit
+log ∷ ∀ m. LogMessages m ⇒ LogReason → String → m Unit
 log reason = logMessage <=< mkLog reason
 
 -- | Log a message for debugging purposes
-logDebug ∷ ∀ m. LogMessages m ⇒ Now m ⇒ String → m Unit
+logDebug ∷ ∀ m. LogMessages m ⇒ String → m Unit
 logDebug = log Debug
 
 -- | Log a message to convey non-error information
-logInfo ∷ ∀ m. LogMessages m ⇒ Now m ⇒ String → m Unit
+logInfo ∷ ∀ m. LogMessages m ⇒ String → m Unit
 logInfo = log Info
 
 -- | Log a message as a warning
-logWarn ∷ ∀ m. LogMessages m ⇒ Now m ⇒ String → m Unit
+logWarn ∷ ∀ m. LogMessages m ⇒ String → m Unit
 logWarn = log Warn
 
 -- | Log a message as an error
-logError ∷ ∀ m. LogMessages m ⇒ Now m ⇒ String → m Unit
+logError ∷ ∀ m. LogMessages m ⇒ String → m Unit
 logError = log Error
 
 -- | Hush a monadic action by logging the error, leaving it open why the error is being logged
-logHush ∷ ∀ m a. LogMessages m ⇒ Now m ⇒ LogReason → m (Either String a) → m (Maybe a)
+logHush ∷ ∀ m a. LogMessages m ⇒ LogReason → m (Either String a) → m (Maybe a)
 logHush reason action =
   action >>= case _ of
     Left e → case reason of
@@ -60,5 +60,5 @@ logHush reason action =
     Right v → pure $ Just v
 
 -- | Hush a monadic action by logging the error in debug mode
-debugHush ∷ ∀ m a. LogMessages m ⇒ Now m ⇒ m (Either String a) → m (Maybe a)
+debugHush ∷ ∀ m a. LogMessages m ⇒ m (Either String a) → m (Maybe a)
 debugHush = logHush Debug
