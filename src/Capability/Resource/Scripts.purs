@@ -1,4 +1,10 @@
-module Yare.Capability.Resource.Scripts where
+module Yare.Capability.Resource.Scripts
+  ( Scripts
+  , class HasScripts
+  , getScripts
+  , codecScripts
+  )
+  where
 
 import Custom.Prelude
 

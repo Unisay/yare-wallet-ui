@@ -9,13 +9,13 @@ data LogLevel = Dev | Prod
 derive instance eqLogLevel ∷ Eq LogLevel
 derive instance ordLogLevel ∷ Ord LogLevel
 
-type Store =
+type AppState =
   { logLevel ∷ LogLevel
   , baseUrl ∷ BaseURL
   }
 
 data Action = Action
 
-reduce ∷ Store → Action → Store
+reduce ∷ AppState → Action → AppState
 reduce store = case _ of
   Action → store

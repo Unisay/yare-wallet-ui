@@ -5968,9 +5968,6 @@
   var append5 = /* @__PURE__ */ append(semigroupArray);
   var traverse_2 = /* @__PURE__ */ traverse_(applicativeEffect);
   var traverse_1 = /* @__PURE__ */ traverse_2(foldableArray);
-  var unsubscribe = function(v) {
-    return v;
-  };
   var subscribe = function(v) {
     return function(k) {
       return v(function($76) {
@@ -8381,7 +8378,7 @@
       return function __do2() {
         var v = read(ref2)();
         var subs = read(v.subscriptions)();
-        return traverse_4(unsubscribe)(bindFlipped5(lookup5(sid))(subs))();
+        return traverse_4(void 0)(bindFlipped5(lookup5(sid))(subs))();
       };
     };
   };
@@ -8676,7 +8673,7 @@
   };
   var cleanupSubscriptionsAndForks = function(v) {
     return function __do2() {
-      bindFlipped6(traverse_23(traverse_33(unsubscribe)))(read(v.subscriptions))();
+      bindFlipped6(traverse_23(traverse_33(void 0)))(read(v.subscriptions))();
       write(Nothing.value)(v.subscriptions)();
       bindFlipped6(traverse_33(function() {
         var $61 = killFiber(error("finalized"));
@@ -11827,7 +11824,7 @@
               })();
             };
           })();
-          return unsubscribe(subscription);
+          return (void 0)(subscription);
         };
       });
     };
@@ -15786,8 +15783,10 @@
   var show7 = /* @__PURE__ */ show(showAsset);
   var onMintingInitiated = function(dictLogMessages) {
     var logInfo2 = logInfo(dictLogMessages);
-    return function(v) {
-      return logInfo2("Minting initiated: " + show7(v));
+    return function(dictMinting) {
+      return function(v) {
+        return logInfo2("Minting initiated: " + show7(v));
+      };
     };
   };
 
