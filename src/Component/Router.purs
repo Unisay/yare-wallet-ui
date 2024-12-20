@@ -2,16 +2,14 @@ module Yare.Component.Router where
 
 import Custom.Prelude
 
+import Control.Monad.Reader (class MonadAsk)
 import Data.Either (hush)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Effect.Aff.Class (class MonadAff)
 import Event as Event
-import Event.Handler (onMintingInitiated)
 import Halogen (liftEffect)
 import Halogen as H
 import Halogen.HTML as HH
-import Halogen.Store.Monad (class MonadStore)
-import Halogen.Subscription as HS
 import Routing.Duplex as RD
 import Routing.Hash (getHash)
 import Type.Proxy (Proxy(..))
@@ -31,9 +29,9 @@ import Yare.Component.Scripts as Scripts
 import Yare.Component.Transactions as Transactions
 import Yare.Component.UTxO as UTxO
 import Yare.Component.Utils (OpaqueSlot)
+import Yare.Config (Config)
 import Yare.Data.Route (Route, routeCodec)
 import Yare.Data.Route as Route
-import Yare.Store as Store
 
 data Query a = Navigate Route a
 
@@ -43,7 +41,6 @@ type Output = Void
 
 type State =
   { route ∷ Maybe Route
-  , mintingInitiated ∷ Maybe (HS.SubscribeIO Event.MintingInitiated)
   }
 
 data Action = Initialize
@@ -61,7 +58,7 @@ type ChildSlots =
 component
   ∷ ∀ m
   . MonadAff m
-  ⇒ MonadStore Store.Action Store.Store m
+  ⇒ MonadAsk Config m
   ⇒ Now m
   ⇒ LogMessages m
   ⇒ HasNetworkInfo m
@@ -72,7 +69,7 @@ component
   ⇒ Navigate m
   ⇒ H.Component Query Input Output m
 component = H.mkComponent
-  { initialState: \_input → { route: Nothing, mintingInitiated: Nothing }
+  { initialState: \_input → { route: Nothing }
   , render
   , eval: H.mkEval $ H.defaultEval
       { handleQuery = handleQuery
@@ -88,10 +85,6 @@ component = H.mkComponent
   initialize = do
     initialRoute ← hush <<< RD.parse routeCodec <$> liftEffect getHash
     navigate $ fromMaybe Route.Home initialRoute
-    mintingInitiated ← H.liftEffect HS.create
-    void $ liftEffect $ HS.subscribe mintingInitiated.emitter \e →
-      onMintingInitiated e
-    H.modify_ _ { mintingInitiated = Just mintingInitiated }
 
   handleQuery ∷ ∀ a. Query a → H.HalogenM _ _ _ _ m (Maybe a)
   handleQuery = case _ of
@@ -102,7 +95,7 @@ component = H.mkComponent
       pure (Just a)
 
   render ∷ State → H.ComponentHTML Action ChildSlots m
-  render { route, mintingInitiated } = case route of
+  render { route } = case route of
     Just r → case r of
       Route.Home →
         HH.slot_ (Proxy @"home") unit Home.component unit
@@ -117,11 +110,8 @@ component = H.mkComponent
       Route.Scripts →
         HH.slot_ (Proxy @"scripts") unit Scripts.component unit
       Route.Nft Route.Mint →
-        case mintingInitiated of
-          Nothing → HH.text "Initializing..."
-          Just { listener } →
-            HH.slot_ (Proxy @"nft_mint") unit Nft.component listener
+        HH.slot_ (Proxy @"nft_mint") unit Nft.component unit
+
     Nothing →
       HH.div_ [ HH.text "Oh no! That page wasn't found." ]
-
 

@@ -5,24 +5,24 @@ import Custom.Prelude
 import Affjax as Affjax
 import Affjax.Web (request)
 import Control.Alternative (class Plus, empty)
+import Control.Monad.Reader (class MonadAsk, ask)
 import Data.Argonaut.Core (Json)
 import Data.Codec.Argonaut (JsonCodec, JsonDecodeError, printJsonDecodeError)
 import Data.Codec.Argonaut as CA
 import Data.Either (Either)
 import Effect.Aff.Class (class MonadAff, liftAff)
-import Halogen.Store.Monad (class MonadStore, getStore)
 import Yare.Api.Request (RequestOptions, defaultRequest)
 import Yare.Capability.LogMessages (class LogMessages, logError)
-import Yare.Store (Action, Store)
+import Yare.Config (Config)
 
 mkRequest
   ∷ ∀ m
   . MonadAff m
-  ⇒ MonadStore Action Store m
+  ⇒ MonadAsk Config m
   ⇒ RequestOptions
   → m (Either Affjax.Error Json)
 mkRequest opts = do
-  { baseUrl } ← getStore
+  { baseUrl } ← ask
   response ← liftAff $ request $ defaultRequest baseUrl opts
   pure $ map _.body response
 

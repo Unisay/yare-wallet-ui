@@ -11,13 +11,11 @@ import Component.Html.Sidebar (sidebar)
 import Data.Form.Field (Field)
 import Data.Form.Field as Field
 import Effect.Class (class MonadEffect)
-import Event as Event
 import Halogen as H
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Extended (css)
 import Halogen.HTML.Extended as HH
 import Halogen.HTML.Properties as HP
-import Halogen.Subscription as HS
 import Yare.Capability.LogMessages (class LogMessages)
 import Yare.Capability.Now (class Now)
 import Yare.Data.Route as Route
@@ -32,10 +30,9 @@ type Error = String
 type State =
   { policy ∷ Field Policy
   , tokenName ∷ Field TokenName
-  , eventListener ∷ HS.Listener Event.MintingInitiated
   }
 
-type Input = HS.Listener Event.MintingInitiated
+type Input = Unit
 
 component
   ∷ ∀ q o m
@@ -52,10 +49,9 @@ component = H.mkComponent
   where
 
   initialState ∷ Input → State
-  initialState eventListener =
+  initialState _input =
     { policy: Field.make parsePolicy printPolicy ""
     , tokenName: Field.make parseTokenName printTokenName ""
-    , eventListener
     }
 
   handleAction ∷ ∀ slots. Action → H.HalogenM State Action slots o m Unit
@@ -67,18 +63,18 @@ component = H.mkComponent
       H.modify_ \s → s { tokenName = Field.update s.tokenName tokenName }
 
     SubmitForm → do
-      { policy, tokenName, eventListener } ← H.get
+      { policy, tokenName } ← H.get
       case Field.result policy, Field.result tokenName of
         Just p, Just t → do
-          let asset = nativeToken p t
           resetForm
-          H.liftEffect $ HS.notify eventListener (Event.MintingInitiated asset)
+        --  TODO: emit event (Event.MintingInitiated asset)
+        -- let asset = nativeToken p t
         _, _ → pass
 
     where
 
     resetForm ∷ H.HalogenM State Action slots o m Unit
-    resetForm = H.put <<< initialState =<< H.gets _.eventListener
+    resetForm = H.put (initialState unit)
 
 render ∷ ∀ m slots. State → H.ComponentHTML Action slots m
 render st =

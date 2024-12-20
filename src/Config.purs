@@ -1,4 +1,4 @@
-module Yare.Store where
+module Yare.Config where
 
 import Custom.Prelude
 
@@ -9,13 +9,8 @@ data LogLevel = Dev | Prod
 derive instance eqLogLevel ∷ Eq LogLevel
 derive instance ordLogLevel ∷ Ord LogLevel
 
-type AppState =
+type Config =
   { logLevel ∷ LogLevel
   , baseUrl ∷ BaseURL
   }
 
-data Action = Action
-
-reduce ∷ AppState → Action → AppState
-reduce store = case _ of
-  Action → store
