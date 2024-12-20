@@ -1,4 +1,7 @@
-module Capability.Resource.CanMint where
+module Yare.Capability.Resource.Minting
+  ( class Minting
+  , mintAsset
+  ) where
 
 import Custom.Prelude
 
@@ -12,10 +15,10 @@ import Yare.Api.Request (RequestMethod(..))
 import Yare.Api.Utils as Api
 import Yare.AppM (AppM)
 
-class Monad m ⇐ CanMint m where
+class Monad m ⇐ Minting m where
   mintAsset ∷ Asset → m (Maybe TxId)
 
-instance CanMint AppM where
+instance Minting AppM where
   mintAsset asset =
     Api.mkRequest
       { endpoint: NftMint
@@ -23,6 +26,6 @@ instance CanMint AppM where
       }
       >>= Api.handleResponseErrors codecTxId hush
 
-instance CanMint m ⇒ CanMint (HalogenM st act slots msg m) where
+instance Minting m ⇒ Minting (HalogenM st act slots msg m) where
   mintAsset = lift <<< mintAsset
 

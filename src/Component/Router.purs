@@ -89,7 +89,8 @@ component = H.mkComponent
     initialRoute ← hush <<< RD.parse routeCodec <$> liftEffect getHash
     navigate $ fromMaybe Route.Home initialRoute
     mintingInitiated ← H.liftEffect HS.create
-    void $ liftEffect $ HS.subscribe mintingInitiated.emitter onMintingInitiated
+    void $ liftEffect $ HS.subscribe mintingInitiated.emitter \e →
+      onMintingInitiated e
     H.modify_ _ { mintingInitiated = Just mintingInitiated }
 
   handleQuery ∷ ∀ a. Query a → H.HalogenM _ _ _ _ m (Maybe a)
@@ -122,3 +123,5 @@ component = H.mkComponent
             HH.slot_ (Proxy @"nft_mint") unit Nft.component listener
     Nothing →
       HH.div_ [ HH.text "Oh no! That page wasn't found." ]
+
+
