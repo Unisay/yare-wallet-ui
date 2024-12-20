@@ -16,6 +16,7 @@
   , "foldable-traversable"
   , "formatters"
   , "halogen"
+  , "halogen-hooks"
   , "http-methods"
   , "integers"
   , "js-bigints"
