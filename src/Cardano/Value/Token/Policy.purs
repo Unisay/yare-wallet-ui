@@ -18,6 +18,7 @@ import Data.String as String
 newtype Policy = Policy String
 
 derive instance eqPolicy ∷ Eq Policy
+derive instance ordPolicy ∷ Ord Policy
 
 instance showPolicy ∷ Show Policy where
   show (Policy policyId) = policyId

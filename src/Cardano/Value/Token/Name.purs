@@ -16,6 +16,7 @@ import Data.String as String
 newtype TokenName = TokenName String
 
 derive instance eqTokenName ∷ Eq TokenName
+derive instance ordTokenName ∷ Ord TokenName
 
 instance showTokenName ∷ Show TokenName where
   show (TokenName tokenName) = tokenName

@@ -8,6 +8,7 @@ import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console as Console
 import Halogen (HalogenM)
+import Halogen.Hooks (HookM)
 import Yare.Capability.Now (class Now)
 import Yare.Data.Log (Log, LogReason(..), mkLog)
 import Yare.Data.Log as Log
@@ -22,6 +23,11 @@ instance logMessagesEffect ∷ LogMessages Effect where
 instance logMessagesHalogenM ∷
   LogMessages m ⇒
   LogMessages (HalogenM st act slots msg m) where
+  logMessage = lift <<< logMessage
+
+instance logMessagesHookM ∷
+  LogMessages m ⇒
+  LogMessages (HookM m) where
   logMessage = lift <<< logMessage
 
 -- | Next, we'll provide a few helper functions to help users easily create and dispatch logs

@@ -6,7 +6,6 @@ import Control.Monad.Reader (class MonadAsk)
 import Data.Either (hush)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Effect.Aff.Class (class MonadAff)
-import Event as Event
 import Halogen (liftEffect)
 import Halogen as H
 import Halogen.HTML as HH

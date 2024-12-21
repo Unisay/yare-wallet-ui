@@ -18,6 +18,7 @@ import Type.Proxy (Proxy(..))
 data Asset = Ada | NativeToken { policy ∷ Policy, name ∷ TokenName }
 
 derive instance eqAsset ∷ Eq Asset
+derive instance ordAsset ∷ Ord Asset
 
 instance showAsset ∷ Show Asset where
   show Ada = "Ada"

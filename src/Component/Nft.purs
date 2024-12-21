@@ -17,8 +17,9 @@ import Halogen.HTML.Extended (css)
 import Halogen.HTML.Extended as HH
 import Halogen.HTML.Properties as HP
 import Halogen.Hooks as Hooks
+import Store (Action(..))
+import Store as Store
 import Yare.Capability.LogMessages (class LogMessages)
-import Yare.Capability.Now (class Now)
 import Yare.Data.Route as Route
 
 data Action
@@ -33,9 +34,26 @@ type State =
   , tokenName ∷ Field TokenName
   }
 
-component ∷ ∀ q i o m. H.Component q i o m
+component ∷ ∀ q i o m. LogMessages m ⇒ MonadEffect m ⇒ H.Component q i o m
 component = Hooks.component \_tokens _input → Hooks.do
+  _ /\ assets ← Store.useAssets identity
   st /\ stId ← Hooks.useState initialState
+
+  let
+    updatePolicy str = Hooks.modify_ stId \s →
+      s { policy = Field.update s.policy str }
+
+    updateTokenName str = Hooks.modify_ stId \s →
+      s { tokenName = Field.update s.tokenName str }
+
+    onSubmit = do
+      { policy, tokenName } ← Hooks.get stId
+      case Field.result policy, Field.result tokenName of
+        Just p, Just t → do
+          Hooks.put stId initialState -- reset form
+          assets.dispatch (RequestMint (nativeToken p t))
+        _, _ → pass
+
   Hooks.pure do
     layout "NFT" (sidebar (Route.Nft Route.Mint))
       [ HH.div [ css "box" ]
@@ -52,9 +70,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                       , HP.value (Field.value st.policy)
                       , HP.required true
                       , HP.placeholder "Hex-encoded"
-                      , HE.onValueInput \str →
-                          Hooks.modify_ stId \s →
-                            s { policy = Field.update s.policy str }
+                      , HE.onValueInput updatePolicy
                       ]
                   , HH.span
                       [ css "icon is-small is-left" ]
@@ -76,9 +92,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                       , HP.value (Field.value st.tokenName)
                       , HP.required true
                       , HP.placeholder "e.g. MyNFT"
-                      , HE.onValueInput \str →
-                          Hooks.modify_ stId \s →
-                            s { tokenName = Field.update s.tokenName str }
+                      , HE.onValueInput updateTokenName
                       ]
                   , HH.span
                       [ css "icon is-small is-left" ]
@@ -91,14 +105,7 @@ component = Hooks.component \_tokens _input → Hooks.do
               [ HH.div [ css "control" ]
                   [ HH.button
                       [ css "button is-link"
-                      , HE.onClick \_event → do
-                          { policy, tokenName } ← Hooks.get stId
-                          case Field.result policy, Field.result tokenName of
-                            Just p, Just t → do
-                              Hooks.put stId initialState
-                            --  TODO: emit event (Event.MintingInitiated asset)
-                            -- let asset = nativeToken p t
-                            _, _ → pass
+                      , HE.onClick \_mouseEvent → onSubmit
                       , HP.disabled $ not
                           ( Field.hasResult st.policy
                               && Field.hasResult st.tokenName
@@ -116,9 +123,3 @@ initialState =
   , tokenName: Field.make parseTokenName printTokenName ""
   }
 
-useStateFn
-  ∷ ∀ state m a
-  . (Hooks.StateId state → a)
-  → state
-  → Hooks.Hook m (Hooks.UseState state) (state /\ a)
-useStateFn fn initial = map (map fn) (Hooks.useState initial)
