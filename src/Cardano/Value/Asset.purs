@@ -39,8 +39,9 @@ codecAsset = dimap toVariant fromVariant do
     }
 
   where
-  toVariant = case _ of
-    Ada → Variant.inj (Proxy @"ada") unit
-    NativeToken nt → Variant.inj (Proxy @"nativeToken") nt
+  toVariant =
+    case _ of
+      Ada → Variant.inj (Proxy @"ada") unit
+      NativeToken nt → Variant.inj (Proxy @"nativeToken") nt
   fromVariant =
     Variant.match { ada: \_ → Ada, nativeToken: NativeToken }

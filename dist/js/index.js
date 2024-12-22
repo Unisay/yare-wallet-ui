@@ -361,11 +361,11 @@
 
   // output/Data.Ord/foreign.js
   var unsafeCompareImpl = function(lt) {
-    return function(eq8) {
+    return function(eq9) {
       return function(gt) {
         return function(x) {
           return function(y) {
-            return x < y ? lt : x === y ? eq8 : gt;
+            return x < y ? lt : x === y ? eq9 : gt;
           };
         };
       };
@@ -790,7 +790,7 @@
     };
   };
   var eqMaybe = function(dictEq) {
-    var eq8 = eq(dictEq);
+    var eq9 = eq(dictEq);
     return {
       eq: function(x) {
         return function(y) {
@@ -799,7 +799,7 @@
           }
           ;
           if (x instanceof Just && y instanceof Just) {
-            return eq8(x.value0)(y.value0);
+            return eq9(x.value0)(y.value0);
           }
           ;
           return false;
@@ -1141,10 +1141,10 @@
   var showTuple = function(dictShow) {
     var show20 = show(dictShow);
     return function(dictShow1) {
-      var show110 = show(dictShow1);
+      var show111 = show(dictShow1);
       return {
         show: function(v) {
-          return "(Tuple " + (show20(v.value0) + (" " + (show110(v.value1) + ")")));
+          return "(Tuple " + (show20(v.value0) + (" " + (show111(v.value1) + ")")));
         }
       };
     };
@@ -1160,13 +1160,13 @@
     return v.value0;
   };
   var eqTuple = function(dictEq) {
-    var eq8 = eq(dictEq);
+    var eq9 = eq(dictEq);
     return function(dictEq1) {
-      var eq13 = eq(dictEq1);
+      var eq14 = eq(dictEq1);
       return {
         eq: function(x) {
           return function(y) {
-            return eq8(x.value0)(y.value0) && eq13(x.value1)(y.value1);
+            return eq9(x.value0)(y.value0) && eq14(x.value1)(y.value1);
           };
         }
       };
@@ -1295,23 +1295,23 @@
 
   // output/Control.Monad/index.js
   var unlessM = function(dictMonad) {
-    var bind27 = bind(dictMonad.Bind1());
+    var bind28 = bind(dictMonad.Bind1());
     var unless5 = unless(dictMonad.Applicative0());
     return function(mb) {
       return function(m) {
-        return bind27(mb)(function(b2) {
+        return bind28(mb)(function(b2) {
           return unless5(b2)(m);
         });
       };
     };
   };
   var ap = function(dictMonad) {
-    var bind27 = bind(dictMonad.Bind1());
+    var bind28 = bind(dictMonad.Bind1());
     var pure25 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a2) {
-        return bind27(f)(function(f$prime) {
-          return bind27(a2)(function(a$prime) {
+        return bind28(f)(function(f$prime) {
+          return bind28(a2)(function(a$prime) {
             return pure25(f$prime(a$prime));
           });
         });
@@ -2976,12 +2976,12 @@
     };
   };
   var bindExceptT = function(dictMonad) {
-    var bind27 = bind(dictMonad.Bind1());
+    var bind28 = bind(dictMonad.Bind1());
     var pure25 = pure(dictMonad.Applicative0());
     return {
       bind: function(v) {
         return function(k) {
-          return bind27(v)(either(function($193) {
+          return bind28(v)(either(function($193) {
             return pure25(Left.create($193));
           })(function(a2) {
             var v1 = k(a2);
@@ -3034,19 +3034,19 @@
     var append9 = append(dictSemigroup);
     return function(dictMonad) {
       var Bind1 = dictMonad.Bind1();
-      var bind27 = bind(Bind1);
+      var bind28 = bind(Bind1);
       var pure25 = pure(dictMonad.Applicative0());
       var functorExceptT1 = functorExceptT(Bind1.Apply0().Functor0());
       return {
         alt: function(v) {
           return function(v1) {
-            return bind27(v)(function(rm) {
+            return bind28(v)(function(rm) {
               if (rm instanceof Right) {
                 return pure25(new Right(rm.value0));
               }
               ;
               if (rm instanceof Left) {
-                return bind27(v1)(function(rn) {
+                return bind28(v1)(function(rn) {
                   if (rn instanceof Right) {
                     return pure25(new Right(rn.value0));
                   }
@@ -3138,13 +3138,13 @@
     };
   };
   var bindReaderT = function(dictBind) {
-    var bind27 = bind(dictBind);
+    var bind28 = bind(dictBind);
     var applyReaderT1 = applyReaderT(dictBind.Apply0());
     return {
       bind: function(v) {
         return function(k) {
           return function(r) {
-            return bind27(v(r))(function(a2) {
+            return bind28(v(r))(function(a2) {
               var v1 = k(a2);
               return v1(r);
             });
@@ -4840,7 +4840,7 @@
     })($$const(IterDone.value));
   }();
   var eqMapIter = function(dictEq) {
-    var eq13 = eq(dictEq);
+    var eq14 = eq(dictEq);
     return function(dictEq1) {
       var eq22 = eq(dictEq1);
       return {
@@ -4854,7 +4854,7 @@
                 var v = stepAsc(a2);
                 if (v instanceof IterNext) {
                   var v2 = stepAsc(b2);
-                  if (v2 instanceof IterNext && (eq13(v.value0)(v2.value0) && eq22(v.value1)(v2.value1))) {
+                  if (v2 instanceof IterNext && (eq14(v.value0)(v2.value0) && eq22(v.value1)(v2.value1))) {
                     $tco_var_a = v.value2;
                     $copy_b = v2.value2;
                     return;
@@ -4902,10 +4902,10 @@
   var showMap = function(dictShow) {
     var showTuple2 = showTuple(dictShow);
     return function(dictShow1) {
-      var show110 = show(showArray(showTuple2(dictShow1)));
+      var show111 = show(showArray(showTuple2(dictShow1)));
       return {
         show: function(as3) {
-          return "(fromFoldable " + (show110(toUnfoldable1(as3)) + ")");
+          return "(fromFoldable " + (show111(toUnfoldable1(as3)) + ")");
         }
       };
     };
@@ -5007,7 +5007,7 @@
   var eqMap = function(dictEq) {
     var eqMapIter1 = eqMapIter(dictEq);
     return function(dictEq1) {
-      var eq13 = eq(eqMapIter1(dictEq1));
+      var eq14 = eq(eqMapIter1(dictEq1));
       return {
         eq: function(xs) {
           return function(ys) {
@@ -5021,7 +5021,7 @@
             ;
             if (xs instanceof Node) {
               if (ys instanceof Node && xs.value1 === ys.value1) {
-                return eq13(toMapIter(xs))(toMapIter(ys));
+                return eq14(toMapIter(xs))(toMapIter(ys));
               }
               ;
               return false;
@@ -12206,18 +12206,18 @@
   var lazyParserT = {
     defer: function(f) {
       var m = defer3(f);
-      return function(state1, more, lift13, $$throw2, done) {
+      return function(state1, more, lift14, $$throw2, done) {
         var v = force(m);
-        return v(state1, more, lift13, $$throw2, done);
+        return v(state1, more, lift14, $$throw2, done);
       };
     }
   };
   var functorParserT = {
     map: function(f) {
       return function(v) {
-        return function(state1, more, lift13, $$throw2, done) {
+        return function(state1, more, lift14, $$throw2, done) {
           return more(function(v1) {
-            return v(state1, more, lift13, $$throw2, function(state22, a2) {
+            return v(state1, more, lift14, $$throw2, function(state22, a2) {
               return more(function(v2) {
                 return done(state22, f(a2));
               });
@@ -12230,11 +12230,11 @@
   var applyParserT = {
     apply: function(v) {
       return function(v1) {
-        return function(state1, more, lift13, $$throw2, done) {
+        return function(state1, more, lift14, $$throw2, done) {
           return more(function(v2) {
-            return v(state1, more, lift13, $$throw2, function(state22, f) {
+            return v(state1, more, lift14, $$throw2, function(state22, f) {
               return more(function(v3) {
-                return v1(state22, more, lift13, $$throw2, function(state3, a2) {
+                return v1(state22, more, lift14, $$throw2, function(state3, a2) {
                   return more(function(v4) {
                     return done(state3, f(a2));
                   });
@@ -12252,12 +12252,12 @@
   var bindParserT = {
     bind: function(v) {
       return function(next) {
-        return function(state1, more, lift13, $$throw2, done) {
+        return function(state1, more, lift14, $$throw2, done) {
           return more(function(v1) {
-            return v(state1, more, lift13, $$throw2, function(state22, a2) {
+            return v(state1, more, lift14, $$throw2, function(state22, a2) {
               return more(function(v2) {
                 var v3 = next(a2);
-                return v3(state22, more, lift13, $$throw2, done);
+                return v3(state22, more, lift14, $$throw2, done);
               });
             });
           });
@@ -12301,15 +12301,15 @@
   var altParserT = {
     alt: function(v) {
       return function(v1) {
-        return function(v2, more, lift13, $$throw2, done) {
+        return function(v2, more, lift14, $$throw2, done) {
           return more(function(v3) {
-            return v(new ParseState(v2.value0, v2.value1, false), more, lift13, function(v4, err) {
+            return v(new ParseState(v2.value0, v2.value1, false), more, lift14, function(v4, err) {
               return more(function(v5) {
                 if (v4.value2) {
                   return $$throw2(v4, err);
                 }
                 ;
-                return v1(v2, more, lift13, $$throw2, done);
+                return v1(v2, more, lift14, $$throw2, done);
               });
             }, done);
           });
@@ -13408,7 +13408,7 @@
   };
   var mkLog = function(dictNow) {
     var Monad0 = dictNow.Monad0();
-    var bind27 = bind(Monad0.Bind1());
+    var bind28 = bind(Monad0.Bind1());
     var nowDateTime3 = nowDateTime2(dictNow);
     var pure25 = pure(Monad0.Applicative0());
     return function(logReason) {
@@ -13420,7 +13420,7 @@
             return $36($37($38));
           };
         }();
-        return bind27(nowDateTime3)(function(now4) {
+        return bind28(nowDateTime3)(function(now4) {
           var headerWith = function(start2) {
             return fold3(["[", start2, ": ", formatTimestamp(now4), "]\n", inputMessage]);
           };
@@ -13868,9 +13868,9 @@
   var monadAppM = /* @__PURE__ */ monadReaderT(monadAff);
   var navigateAppM = {
     navigate: /* @__PURE__ */ function() {
-      var $26 = print6(routeCodec);
-      return function($27) {
-        return liftEffect7(setHash2($26($27)));
+      var $25 = print6(routeCodec);
+      return function($26) {
+        return liftEffect7(setHash2($25($26)));
       };
     }(),
     Monad0: function() {
@@ -15364,14 +15364,14 @@
   var identity17 = /* @__PURE__ */ identity(categoryFn);
   var mkRequest2 = function(dictMonadAff) {
     var Monad0 = dictMonadAff.MonadEffect0().Monad0();
-    var bind27 = bind(Monad0.Bind1());
+    var bind28 = bind(Monad0.Bind1());
     var liftAff2 = liftAff(dictMonadAff);
     var pure25 = pure(Monad0.Applicative0());
     return function(dictMonadAsk) {
       var ask3 = ask(dictMonadAsk);
       return function(opts) {
-        return bind27(ask3)(function(v) {
-          return bind27(liftAff2(request3(defaultRequest(v.baseUrl)(opts))))(function(response) {
+        return bind28(ask3)(function(v) {
+          return bind28(liftAff2(request3(defaultRequest(v.baseUrl)(opts))))(function(response) {
             return pure25(map40(function(v1) {
               return v1.body;
             })(response));
@@ -15440,114 +15440,6 @@
     };
   }();
 
-  // output/Data.Codec.Argonaut.Record/index.js
-  var rowListCodecNil = {
-    rowListCodec: function(v) {
-      return function(v1) {
-        return record;
-      };
-    }
-  };
-  var rowListCodec = function(dict) {
-    return dict.rowListCodec;
-  };
-  var rowListCodecCons = function(dictRowListCodec) {
-    var rowListCodec1 = rowListCodec(dictRowListCodec);
-    return function() {
-      return function() {
-        return function(dictIsSymbol) {
-          var get8 = get2(dictIsSymbol)();
-          var recordProp2 = recordProp(dictIsSymbol)();
-          return {
-            rowListCodec: function(v) {
-              return function(codecs) {
-                var tail3 = rowListCodec1($$Proxy.value)(codecs);
-                var codec2 = get8($$Proxy.value)(codecs);
-                return recordProp2($$Proxy.value)(codec2)(tail3);
-              };
-            }
-          };
-        };
-      };
-    };
-  };
-  var record2 = function() {
-    return function(dictRowListCodec) {
-      return rowListCodec(dictRowListCodec)($$Proxy.value);
-    };
-  };
-  var record1 = /* @__PURE__ */ record2();
-  var object3 = function() {
-    return function(dictRowListCodec) {
-      var record22 = record1(dictRowListCodec);
-      return function(name17) {
-        return function(rec) {
-          return object2(name17)(record22(rec));
-        };
-      };
-    };
-  };
-
-  // output/Cardano.Block/index.js
-  var renderBlockHash = function(v) {
-    return v;
-  };
-  var codecBlockHash = /* @__PURE__ */ coercible()("BlockHash")(string2);
-  var codecBlockRef = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
-    reflectSymbol: function() {
-      return "slotNo";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "headerHash";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "blockNo";
-    }
-  }))("BlockRef")({
-    slotNo: $$int2,
-    blockNo: $$int2,
-    headerHash: codecBlockHash
-  });
-
-  // output/Yare.Capability.Resource.NetworkInfo/index.js
-  var lift6 = /* @__PURE__ */ lift(monadTransHalogenM);
-  var getNetworkInfo = function(dict) {
-    return dict.getNetworkInfo;
-  };
-  var hasNetworkInfoHalogenM = function(dictHasNetworkInfo) {
-    return {
-      getNetworkInfo: lift6(dictHasNetworkInfo.Monad0())(getNetworkInfo(dictHasNetworkInfo)),
-      Monad0: function() {
-        return monadHalogenM;
-      }
-    };
-  };
-  var codecNetworkInfo = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
-    reflectSymbol: function() {
-      return "networkTip";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "lastIndexed";
-    }
-  }))("NetworkInfo")({
-    lastIndexed: codecBlockRef,
-    networkTip: codecBlockRef
-  });
-  var hasNetworkInfoAppM = /* @__PURE__ */ function() {
-    return {
-      getNetworkInfo: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
-        endpoint: Network2.value,
-        method: Get.value
-      }))(handleResponseErrors(logMessagesAppM)(codecNetworkInfo)(hush)),
-      Monad0: function() {
-        return monadAppM;
-      }
-    };
-  }();
-
   // output/Cardano.Transaction/index.js
   var bindFlipped12 = /* @__PURE__ */ bindFlipped(bindMaybe);
   var show5 = /* @__PURE__ */ show(showInt);
@@ -15566,7 +15458,7 @@
           return v2.value0;
         }
         ;
-        throw new Error("Failed pattern match at Cardano.Transaction (line 32, column 13 - line 34, column 21): " + [v2.constructor.name]);
+        throw new Error("Failed pattern match at Cardano.Transaction (line 34, column 13 - line 36, column 21): " + [v2.constructor.name]);
       }()
     };
   };
@@ -15576,156 +15468,13 @@
   var renderTxId = function(v) {
     return v;
   };
+  var showTxId = {
+    show: renderTxId
+  };
+  var eqTxId = eqString;
   var codecTxIx = /* @__PURE__ */ coercible2("TxIx")($$int2);
   var codecTxIn = /* @__PURE__ */ coercible2("TxIn")(string2);
   var codecTxId = /* @__PURE__ */ coercible2("TxId")(string2);
-
-  // output/Data.Codec.Argonaut.Sum/index.js
-  var bindFlipped13 = /* @__PURE__ */ bindFlipped(bindEither);
-  var enumSum = function(printTag) {
-    return function(parseTag) {
-      return codec(function(j) {
-        return bindFlipped13(function() {
-          var $18 = maybe(new Left(new UnexpectedValue2(j)))(Right.create);
-          return function($19) {
-            return $18(parseTag($19));
-          };
-        }())(decode(string2)(j));
-      })(function() {
-        var $20 = encode(string2);
-        return function($21) {
-          return $20(printTag($21));
-        };
-      }());
-    };
-  };
-
-  // output/Cardano.Script/index.js
-  var DeploymentInitiated = /* @__PURE__ */ function() {
-    function DeploymentInitiated2() {
-    }
-    ;
-    DeploymentInitiated2.value = new DeploymentInitiated2();
-    return DeploymentInitiated2;
-  }();
-  var DeploymentCompleted = /* @__PURE__ */ function() {
-    function DeploymentCompleted2() {
-    }
-    ;
-    DeploymentCompleted2.value = new DeploymentCompleted2();
-    return DeploymentCompleted2;
-  }();
-  var renderScriptStatus = function(v) {
-    if (v instanceof DeploymentInitiated) {
-      return "deploy-initiated";
-    }
-    ;
-    if (v instanceof DeploymentCompleted) {
-      return "deploy-completed";
-    }
-    ;
-    throw new Error("Failed pattern match at Cardano.Script (line 26, column 1 - line 26, column 43): " + [v.constructor.name]);
-  };
-  var renderScriptHash = function(v) {
-    return v;
-  };
-  var codecScriptStatus = /* @__PURE__ */ enumSum(renderScriptStatus)(function(v) {
-    if (v === "deploy-initiated") {
-      return new Just(DeploymentInitiated.value);
-    }
-    ;
-    if (v === "deploy-completed") {
-      return new Just(DeploymentCompleted.value);
-    }
-    ;
-    return Nothing.value;
-  });
-  var codecScriptHash = /* @__PURE__ */ coercible()("ScriptHash")(string2);
-  var codecScriptDeployment = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
-    reflectSymbol: function() {
-      return "scriptTxOut";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "scriptTxId";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "scriptStatus";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "scriptHash";
-    }
-  }))("ScriptDeployment")({
-    scriptHash: codecScriptHash,
-    scriptStatus: codecScriptStatus,
-    scriptTxId: codecTxId,
-    scriptTxOut: codecTxIx
-  });
-
-  // output/Yare.Capability.Resource.Scripts/index.js
-  var lift7 = /* @__PURE__ */ lift(monadTransHalogenM);
-  var getScripts = function(dict) {
-    return dict.getScripts;
-  };
-  var hasScriptsHalogenM = function(dictHasScripts) {
-    return {
-      getScripts: lift7(dictHasScripts.Monad0())(getScripts(dictHasScripts)),
-      Monad0: function() {
-        return monadHalogenM;
-      }
-    };
-  };
-  var codecScripts = /* @__PURE__ */ array(codecScriptDeployment);
-  var hasScriptsAppM = /* @__PURE__ */ function() {
-    return {
-      getScripts: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
-        endpoint: Scripts2.value,
-        method: Get.value
-      }))(handleResponseErrors(logMessagesAppM)(codecScripts)(hush)),
-      Monad0: function() {
-        return monadAppM;
-      }
-    };
-  }();
-
-  // output/Yare.Capability.Resource.Transactions/index.js
-  var lift8 = /* @__PURE__ */ lift(monadTransHalogenM);
-  var getTransactions = function(dict) {
-    return dict.getTransactions;
-  };
-  var hasTransactionsHalogenM = function(dictHasTransactions) {
-    return {
-      getTransactions: lift8(dictHasTransactions.Monad0())(getTransactions(dictHasTransactions)),
-      Monad0: function() {
-        return monadHalogenM;
-      }
-    };
-  };
-  var codecTransactions = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
-    reflectSymbol: function() {
-      return "submitted";
-    }
-  }))()()({
-    reflectSymbol: function() {
-      return "inLedger";
-    }
-  }))("Transactions")({
-    submitted: /* @__PURE__ */ array(codecTxId),
-    inLedger: /* @__PURE__ */ array(codecTxId)
-  });
-  var hasTransactionsAppM = /* @__PURE__ */ function() {
-    return {
-      getTransactions: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
-        endpoint: Transactions2.value,
-        method: Get.value
-      }))(handleResponseErrors(logMessagesAppM)(codecTransactions)(hush)),
-      Monad0: function() {
-        return monadAppM;
-      }
-    };
-  }();
 
   // output/Cardano.Value.Token.Name/index.js
   var discard5 = /* @__PURE__ */ discard(discardUnit)(bindEither);
@@ -15807,6 +15556,54 @@
     }
   };
   var codecPolicy = /* @__PURE__ */ prismaticCodec("Policy")(readPolicy)(printPolicy)(string2);
+
+  // output/Data.Codec.Argonaut.Record/index.js
+  var rowListCodecNil = {
+    rowListCodec: function(v) {
+      return function(v1) {
+        return record;
+      };
+    }
+  };
+  var rowListCodec = function(dict) {
+    return dict.rowListCodec;
+  };
+  var rowListCodecCons = function(dictRowListCodec) {
+    var rowListCodec1 = rowListCodec(dictRowListCodec);
+    return function() {
+      return function() {
+        return function(dictIsSymbol) {
+          var get8 = get2(dictIsSymbol)();
+          var recordProp2 = recordProp(dictIsSymbol)();
+          return {
+            rowListCodec: function(v) {
+              return function(codecs) {
+                var tail3 = rowListCodec1($$Proxy.value)(codecs);
+                var codec2 = get8($$Proxy.value)(codecs);
+                return recordProp2($$Proxy.value)(codec2)(tail3);
+              };
+            }
+          };
+        };
+      };
+    };
+  };
+  var record2 = function() {
+    return function(dictRowListCodec) {
+      return rowListCodec(dictRowListCodec)($$Proxy.value);
+    };
+  };
+  var record1 = /* @__PURE__ */ record2();
+  var object3 = function() {
+    return function(dictRowListCodec) {
+      var record22 = record1(dictRowListCodec);
+      return function(name17) {
+        return function(rec) {
+          return object2(name17)(record22(rec));
+        };
+      };
+    };
+  };
 
   // output/Data.Variant/index.js
   var onMatch = function() {
@@ -16095,7 +15892,7 @@
         return inj22($$Proxy.value)(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at Cardano.Value.Asset (line 42, column 15 - line 44, column 59): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Cardano.Value.Asset (line 43, column 5 - line 45, column 61): " + [v.constructor.name]);
     };
     var fromVariant = match3()()()({
       ada: function(v) {
@@ -16118,6 +15915,247 @@
         name: codecTokenName
       }))
     }));
+  }();
+
+  // output/Yare.Capability.Resource.Minting/index.js
+  var bind9 = /* @__PURE__ */ bind(bindAppM);
+  var mkRequest3 = /* @__PURE__ */ mkRequest2(monadAffAppM)(monadAsk);
+  var handleResponseErrors2 = /* @__PURE__ */ handleResponseErrors(logMessagesAppM);
+  var lift13 = /* @__PURE__ */ lift(monadTransHookM);
+  var mintingAppM = {
+    mintAsset: function(asset) {
+      return bind9(mkRequest3({
+        endpoint: NftMint.value,
+        method: new Post(new Just(encode(codecAsset)(asset)))
+      }))(handleResponseErrors2(codecTxId)(hush));
+    },
+    Monad0: function() {
+      return monadAppM;
+    }
+  };
+  var mintAsset = function(dict) {
+    return dict.mintAsset;
+  };
+  var mintingHookM = function(dictMinting) {
+    return {
+      mintAsset: function() {
+        var $22 = lift13(dictMinting.Monad0());
+        var $23 = mintAsset(dictMinting);
+        return function($24) {
+          return $22($23($24));
+        };
+      }(),
+      Monad0: function() {
+        return monadHookM;
+      }
+    };
+  };
+
+  // output/Cardano.Block/index.js
+  var renderBlockHash = function(v) {
+    return v;
+  };
+  var codecBlockHash = /* @__PURE__ */ coercible()("BlockHash")(string2);
+  var codecBlockRef = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
+    reflectSymbol: function() {
+      return "slotNo";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "headerHash";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "blockNo";
+    }
+  }))("BlockRef")({
+    slotNo: $$int2,
+    blockNo: $$int2,
+    headerHash: codecBlockHash
+  });
+
+  // output/Yare.Capability.Resource.NetworkInfo/index.js
+  var lift6 = /* @__PURE__ */ lift(monadTransHalogenM);
+  var getNetworkInfo = function(dict) {
+    return dict.getNetworkInfo;
+  };
+  var hasNetworkInfoHalogenM = function(dictHasNetworkInfo) {
+    return {
+      getNetworkInfo: lift6(dictHasNetworkInfo.Monad0())(getNetworkInfo(dictHasNetworkInfo)),
+      Monad0: function() {
+        return monadHalogenM;
+      }
+    };
+  };
+  var codecNetworkInfo = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
+    reflectSymbol: function() {
+      return "networkTip";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "lastIndexed";
+    }
+  }))("NetworkInfo")({
+    lastIndexed: codecBlockRef,
+    networkTip: codecBlockRef
+  });
+  var hasNetworkInfoAppM = /* @__PURE__ */ function() {
+    return {
+      getNetworkInfo: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
+        endpoint: Network2.value,
+        method: Get.value
+      }))(handleResponseErrors(logMessagesAppM)(codecNetworkInfo)(hush)),
+      Monad0: function() {
+        return monadAppM;
+      }
+    };
+  }();
+
+  // output/Data.Codec.Argonaut.Sum/index.js
+  var bindFlipped13 = /* @__PURE__ */ bindFlipped(bindEither);
+  var enumSum = function(printTag) {
+    return function(parseTag) {
+      return codec(function(j) {
+        return bindFlipped13(function() {
+          var $18 = maybe(new Left(new UnexpectedValue2(j)))(Right.create);
+          return function($19) {
+            return $18(parseTag($19));
+          };
+        }())(decode(string2)(j));
+      })(function() {
+        var $20 = encode(string2);
+        return function($21) {
+          return $20(printTag($21));
+        };
+      }());
+    };
+  };
+
+  // output/Cardano.Script/index.js
+  var DeploymentInitiated = /* @__PURE__ */ function() {
+    function DeploymentInitiated2() {
+    }
+    ;
+    DeploymentInitiated2.value = new DeploymentInitiated2();
+    return DeploymentInitiated2;
+  }();
+  var DeploymentCompleted = /* @__PURE__ */ function() {
+    function DeploymentCompleted2() {
+    }
+    ;
+    DeploymentCompleted2.value = new DeploymentCompleted2();
+    return DeploymentCompleted2;
+  }();
+  var renderScriptStatus = function(v) {
+    if (v instanceof DeploymentInitiated) {
+      return "deploy-initiated";
+    }
+    ;
+    if (v instanceof DeploymentCompleted) {
+      return "deploy-completed";
+    }
+    ;
+    throw new Error("Failed pattern match at Cardano.Script (line 26, column 1 - line 26, column 43): " + [v.constructor.name]);
+  };
+  var renderScriptHash = function(v) {
+    return v;
+  };
+  var codecScriptStatus = /* @__PURE__ */ enumSum(renderScriptStatus)(function(v) {
+    if (v === "deploy-initiated") {
+      return new Just(DeploymentInitiated.value);
+    }
+    ;
+    if (v === "deploy-completed") {
+      return new Just(DeploymentCompleted.value);
+    }
+    ;
+    return Nothing.value;
+  });
+  var codecScriptHash = /* @__PURE__ */ coercible()("ScriptHash")(string2);
+  var codecScriptDeployment = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
+    reflectSymbol: function() {
+      return "scriptTxOut";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "scriptTxId";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "scriptStatus";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "scriptHash";
+    }
+  }))("ScriptDeployment")({
+    scriptHash: codecScriptHash,
+    scriptStatus: codecScriptStatus,
+    scriptTxId: codecTxId,
+    scriptTxOut: codecTxIx
+  });
+
+  // output/Yare.Capability.Resource.Scripts/index.js
+  var lift7 = /* @__PURE__ */ lift(monadTransHalogenM);
+  var getScripts = function(dict) {
+    return dict.getScripts;
+  };
+  var hasScriptsHalogenM = function(dictHasScripts) {
+    return {
+      getScripts: lift7(dictHasScripts.Monad0())(getScripts(dictHasScripts)),
+      Monad0: function() {
+        return monadHalogenM;
+      }
+    };
+  };
+  var codecScripts = /* @__PURE__ */ array(codecScriptDeployment);
+  var hasScriptsAppM = /* @__PURE__ */ function() {
+    return {
+      getScripts: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
+        endpoint: Scripts2.value,
+        method: Get.value
+      }))(handleResponseErrors(logMessagesAppM)(codecScripts)(hush)),
+      Monad0: function() {
+        return monadAppM;
+      }
+    };
+  }();
+
+  // output/Yare.Capability.Resource.Transactions/index.js
+  var lift8 = /* @__PURE__ */ lift(monadTransHalogenM);
+  var getTransactions = function(dict) {
+    return dict.getTransactions;
+  };
+  var hasTransactionsHalogenM = function(dictHasTransactions) {
+    return {
+      getTransactions: lift8(dictHasTransactions.Monad0())(getTransactions(dictHasTransactions)),
+      Monad0: function() {
+        return monadHalogenM;
+      }
+    };
+  };
+  var codecTransactions = /* @__PURE__ */ object3()(/* @__PURE__ */ rowListCodecCons(/* @__PURE__ */ rowListCodecCons(rowListCodecNil)()()({
+    reflectSymbol: function() {
+      return "submitted";
+    }
+  }))()()({
+    reflectSymbol: function() {
+      return "inLedger";
+    }
+  }))("Transactions")({
+    submitted: /* @__PURE__ */ array(codecTxId),
+    inLedger: /* @__PURE__ */ array(codecTxId)
+  });
+  var hasTransactionsAppM = /* @__PURE__ */ function() {
+    return {
+      getTransactions: bind(bindAppM)(mkRequest2(monadAffAppM)(monadAsk)({
+        endpoint: Transactions2.value,
+        method: Get.value
+      }))(handleResponseErrors(logMessagesAppM)(codecTransactions)(hush)),
+      Monad0: function() {
+        return monadAppM;
+      }
+    };
   }();
 
   // output/JS.BigInt/foreign.js
@@ -16375,7 +16413,7 @@
 
   // output/Yare.Component.Addresses/index.js
   var show8 = /* @__PURE__ */ show(showInt);
-  var bind9 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind10 = /* @__PURE__ */ bind(bindHalogenM);
   var put5 = /* @__PURE__ */ put(monadStateHalogenM);
   var Initialize2 = /* @__PURE__ */ function() {
     function Initialize9() {
@@ -16415,7 +16453,7 @@
       }()]);
     };
     var handleAction = function(v) {
-      return bind9(getAddresses2)(function(v1) {
+      return bind10(getAddresses2)(function(v1) {
         if (v1.length === 0) {
           return put5(new Failure("No info about addresses is available"));
         }
@@ -16451,7 +16489,7 @@
   // output/Yare.Component.Network/index.js
   var div4 = /* @__PURE__ */ div(euclideanRingInt);
   var show9 = /* @__PURE__ */ show(showInt);
-  var bind10 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind11 = /* @__PURE__ */ bind(bindHalogenM);
   var put6 = /* @__PURE__ */ put(monadStateHalogenM);
   var Initialize3 = /* @__PURE__ */ function() {
     function Initialize9() {
@@ -16494,7 +16532,7 @@
       }()]);
     };
     var handleAction = function(v) {
-      return bind10(getNetworkInfo2)(function(v1) {
+      return bind11(getNetworkInfo2)(function(v1) {
         if (v1 instanceof Nothing) {
           return put6(new Failure("No network info available"));
         }
@@ -16520,57 +16558,55 @@
   };
 
   // output/Cardano.Value.Asset.MintStatus/index.js
-  var NotMinted = /* @__PURE__ */ function() {
-    function NotMinted2() {
-    }
-    ;
-    NotMinted2.value = new NotMinted2();
-    return NotMinted2;
-  }();
+  var show10 = /* @__PURE__ */ show(showTxId);
+  var eq7 = /* @__PURE__ */ eq(/* @__PURE__ */ eqMaybe(eqTxId));
+  var eq13 = /* @__PURE__ */ eq(eqTxId);
   var MintRequested = /* @__PURE__ */ function() {
-    function MintRequested2() {
+    function MintRequested2(value0) {
+      this.value0 = value0;
     }
     ;
-    MintRequested2.value = new MintRequested2();
+    MintRequested2.create = function(value0) {
+      return new MintRequested2(value0);
+    };
     return MintRequested2;
   }();
-  var Minted = /* @__PURE__ */ function() {
-    function Minted2() {
+  var MintConfirmed = /* @__PURE__ */ function() {
+    function MintConfirmed2(value0) {
+      this.value0 = value0;
     }
     ;
-    Minted2.value = new Minted2();
-    return Minted2;
+    MintConfirmed2.create = function(value0) {
+      return new MintConfirmed2(value0);
+    };
+    return MintConfirmed2;
   }();
   var showMintStatus = {
     show: function(v) {
-      if (v instanceof NotMinted) {
-        return "NotMinted";
-      }
-      ;
-      if (v instanceof MintRequested) {
+      if (v instanceof MintRequested && v.value0 instanceof Nothing) {
         return "MintRequested";
       }
       ;
-      if (v instanceof Minted) {
-        return "Minted";
+      if (v instanceof MintRequested && v.value0 instanceof Just) {
+        return "MintRequested (" + (show10(v.value0.value0) + ")");
       }
       ;
-      throw new Error("Failed pattern match at Cardano.Value.Asset.MintStatus (line 10, column 10 - line 13, column 22): " + [v.constructor.name]);
+      if (v instanceof MintConfirmed) {
+        return "Minted (" + (show10(v.value0) + ")");
+      }
+      ;
+      throw new Error("Failed pattern match at Cardano.Value.Asset.MintStatus (line 12, column 10 - line 15, column 56): " + [v.constructor.name]);
     }
   };
   var eqMintStatus = {
     eq: function(x) {
       return function(y) {
-        if (x instanceof NotMinted && y instanceof NotMinted) {
-          return true;
-        }
-        ;
         if (x instanceof MintRequested && y instanceof MintRequested) {
-          return true;
+          return eq7(x.value0)(y.value0);
         }
         ;
-        if (x instanceof Minted && y instanceof Minted) {
-          return true;
+        if (x instanceof MintConfirmed && y instanceof MintConfirmed) {
+          return eq13(x.value0)(y.value0);
         }
         ;
         return false;
@@ -16766,7 +16802,7 @@
       return Hook($17($18));
     };
   }();
-  var bind11 = function(v) {
+  var bind17 = function(v) {
     return function(f) {
       return bind16(v)(function(a2) {
         var v1 = f(a2);
@@ -16774,7 +16810,7 @@
       });
     };
   };
-  var discard7 = bind11;
+  var discard7 = bind17;
 
   // output/Effect.Exception.Unsafe/index.js
   var unsafeThrowException = function($1) {
@@ -16928,12 +16964,12 @@
   // output/Halogen.Hooks.Internal.Eval/index.js
   var fromJust9 = /* @__PURE__ */ fromJust();
   var unsafeIndex2 = /* @__PURE__ */ unsafeIndex();
-  var bind17 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind18 = /* @__PURE__ */ bind(bindHalogenM);
   var discard8 = /* @__PURE__ */ discard(discardUnit);
   var discard12 = /* @__PURE__ */ discard8(bindHalogenM);
   var when4 = /* @__PURE__ */ when(applicativeHalogenM);
   var sequence_2 = /* @__PURE__ */ sequence_(applicativeHalogenM)(foldableArray);
-  var eq7 = /* @__PURE__ */ eq(eqInterpretHookReason);
+  var eq8 = /* @__PURE__ */ eq(eqInterpretHookReason);
   var $$void8 = /* @__PURE__ */ $$void(functorHalogenM);
   var gets2 = /* @__PURE__ */ gets(monadStateHalogenM);
   var unwrap8 = /* @__PURE__ */ unwrap();
@@ -16941,7 +16977,7 @@
   var pure19 = /* @__PURE__ */ pure(applicativeHalogenM);
   var map43 = /* @__PURE__ */ map(functorHookM);
   var unless4 = /* @__PURE__ */ unless(applicativeHalogenM);
-  var bind18 = /* @__PURE__ */ bind(freeBind);
+  var bind19 = /* @__PURE__ */ bind(freeBind);
   var discard32 = /* @__PURE__ */ discard8(freeBind);
   var pure23 = /* @__PURE__ */ pure(freeApplicative);
   var void1 = /* @__PURE__ */ $$void(freeFunctor);
@@ -16977,7 +17013,7 @@
       return function(_evalHook) {
         var executeHooksAndEffects = function(stateRef) {
           return function(reason2) {
-            return bind17(_evalHook(reason2))(function() {
+            return bind18(_evalHook(reason2))(function() {
               var v = unsafePerformEffect(read(stateRef));
               return discard12(when4(!$$null2(v.evalQueue))(function() {
                 var runQueue = unsafePerformEffect(function __do2() {
@@ -16998,7 +17034,7 @@
                 });
                 return discard12(runQueue)(function() {
                   var v1 = unsafePerformEffect(read(stateRef));
-                  var initializeOrStepReason = eq7(reason2)(Initialize4.value) || eq7(reason2)(Step3.value);
+                  var initializeOrStepReason = eq8(reason2)(Initialize4.value) || eq8(reason2)(Step3.value);
                   return when4(v1.stateDirty && initializeOrStepReason)($$void8(executeHooksAndEffects(stateRef)(Step3.value)));
                 });
               }()))(function() {
@@ -17013,15 +17049,15 @@
         };
         return function(v) {
           if (v instanceof Initialize) {
-            return bind17(get5)(function(v1) {
-              return bind17(executeHooksAndEffects(v1.stateRef)(Initialize4.value))(function() {
+            return bind18(get5)(function(v1) {
+              return bind18(executeHooksAndEffects(v1.stateRef)(Initialize4.value))(function() {
                 return pure19(v.value0);
               });
             });
           }
           ;
           if (v instanceof Query) {
-            return bind17(get5)(function(v1) {
+            return bind18(get5)(function(v1) {
               var v2 = unsafePerformEffect(read(v1.stateRef));
               if (v2.queryFn instanceof Nothing) {
                 return pure19(v.value1(unit));
@@ -17042,7 +17078,7 @@
           }
           ;
           if (v instanceof Action2) {
-            return bind17(get5)(function(v1) {
+            return bind18(get5)(function(v1) {
               return discard12(_evalHookM(executeHooksAndEffects(v1.stateRef)(Step3.value))(v.value0))(function() {
                 return pure19(v.value1);
               });
@@ -17050,7 +17086,7 @@
           }
           ;
           if (v instanceof Receive) {
-            return bind17(get5)(function(v1) {
+            return bind18(get5)(function(v1) {
               var v2 = unsafePerformEffect(read(v1.stateRef));
               return discard12(unless4(inputEq(v2.input)(v.value0))(function() {
                 var execute = unsafePerformEffect(function __do2() {
@@ -17077,8 +17113,8 @@
           }
           ;
           if (v instanceof Finalize) {
-            return bind17(get5)(function(v1) {
-              return bind17(executeHooksAndEffects(v1.stateRef)(Finalize2.value))(function() {
+            return bind18(get5)(function(v1) {
+              return bind18(executeHooksAndEffects(v1.stateRef)(Finalize2.value))(function() {
                 return pure19(v.value0);
               });
             });
@@ -17093,7 +17129,7 @@
     return function(v1) {
       var interpretHalogenHook = function(v2) {
         if (v2 instanceof Modify) {
-          return bind18(liftF(new State(function(state3) {
+          return bind19(liftF(new State(function(state3) {
             return new Tuple(state3, state3);
           })))(function(v3) {
             var v4 = unsafePerformEffect(read(v3.stateRef));
@@ -17268,7 +17304,7 @@
               if (reason2 instanceof Initialize4) {
                 return pure23(unsafePerformEffect(function() {
                   var $$eval = function(index6) {
-                    return bind17(_evalHookM(_evalHook(Queued.value))(v.value1))(function(mbFinalizer) {
+                    return bind18(_evalHookM(_evalHook(Queued.value))(v.value1))(function(mbFinalizer) {
                       var finalizer = fromMaybe(pure32(unit))(mbFinalizer);
                       var updateQueue = function(st) {
                         return unsafeSetCell(index6)(new Tuple(v.value0, finalizer))(st);
@@ -17330,7 +17366,7 @@
                     };
                     var $171 = isEmpty(memos$prime["new"].memos) || not1(memos$prime["new"].eq)(memos$prime.old.memos)(memos$prime["new"].memos);
                     if ($171) {
-                      var $$eval = bind17(_evalHookM(_evalHook(Queued.value))(applySecond2(v2.value1)(v.value1)))(function(mbFinalizer) {
+                      var $$eval = bind18(_evalHookM(_evalHook(Queued.value))(applySecond2(v2.value1)(v.value1)))(function(mbFinalizer) {
                         var v3 = unsafePerformEffect(read(stateRef));
                         var newFinalizer = fromMaybe(pure32(unit))(mbFinalizer);
                         var newValue = new Tuple(v.value0, newFinalizer);
@@ -17574,7 +17610,7 @@
   };
 
   // output/Halogen.Hooks.Component/index.js
-  var bind19 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind20 = /* @__PURE__ */ bind(bindHalogenM);
   var get6 = /* @__PURE__ */ get(monadStateHalogenM);
   var discard9 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
   var modify_4 = /* @__PURE__ */ modify_2(monadStateHalogenM);
@@ -17619,11 +17655,11 @@
         outputToken
       });
       var evalHook2 = function(reason2) {
-        return bind19(get6)(function(v) {
+        return bind20(get6)(function(v) {
           var $$eval = evalHook(evalHookM)(evalHook2)(reason2)(v.stateRef);
           var v1 = unsafePerformEffect(read(v.stateRef));
           var hookF = unsafeFromHook(hookFn(v1.input));
-          return bind19(substFree($$eval)(hookF))(function(a2) {
+          return bind20(substFree($$eval)(hookF))(function(a2) {
             return discard9(modify_4(over3(HookState)(function(v2) {
               return {
                 stateRef: v2.stateRef,
@@ -17750,7 +17786,7 @@
   };
 
   // output/Halogen.Helix.Hooks/index.js
-  var bind20 = /* @__PURE__ */ bind(bindHookM);
+  var bind21 = /* @__PURE__ */ bind(bindHookM);
   var mapFlipped4 = /* @__PURE__ */ mapFlipped(functorEmitter);
   var when5 = /* @__PURE__ */ when(applicativeHookM);
   var discard10 = /* @__PURE__ */ discard(discardUnit)(bindHookM);
@@ -17766,15 +17802,15 @@
       return function(store) {
         return function(initialState2) {
           return function(selector) {
-            return bind11(useState(initialState2))(function(v) {
+            return bind17(useState(initialState2))(function(v) {
               return discard7(useLifecycleEffect(function() {
                 var emitter = emitState(store);
-                return bind20(subscribe3(mapFlipped4(emitter)(function(newState) {
-                  return bind20(get3(v.value1))(function(current) {
+                return bind21(subscribe3(mapFlipped4(emitter)(function(newState) {
+                  return bind21(get3(v.value1))(function(current) {
                     return when5(notEq4(selector(newState))(selector(current)))(put3(v.value1)(newState));
                   });
                 })))(function(subscription) {
-                  return discard10(bind20(getState2(store))(put3(v.value1)))(function() {
+                  return discard10(bind21(getState2(store))(put3(v.value1)))(function() {
                     return pure21(new Just(unsubscribe4(subscription)));
                   });
                 });
@@ -17799,9 +17835,9 @@
       return function(id4) {
         return function(reducer) {
           return function(initialState2) {
-            return function(middleware2) {
+            return function(middleware) {
               return unsafePerformEffect(function __do2() {
-                var store = mkHelixStore2(id4)(initialState2)(reducer)(new Just(middleware2))();
+                var store = mkHelixStore2(id4)(initialState2)(reducer)(new Just(middleware))();
                 var $33 = mkHook2(store)(initialState2);
                 return function($34) {
                   return wrap4($33($34));
@@ -17831,9 +17867,36 @@
 
   // output/Store/index.js
   var discard11 = /* @__PURE__ */ discard(discardUnit);
-  var show10 = /* @__PURE__ */ show(/* @__PURE__ */ showMap(showAsset)(showMintStatus));
+  var show11 = /* @__PURE__ */ show(/* @__PURE__ */ showMap(showAsset)(showMintStatus));
   var show17 = /* @__PURE__ */ show(showAsset);
+  var show23 = /* @__PURE__ */ show(showTxId);
   var insert8 = /* @__PURE__ */ insert(ordAsset);
+  var EventMintRequested = /* @__PURE__ */ function() {
+    function EventMintRequested2(value0, value1) {
+      this.value0 = value0;
+      this.value1 = value1;
+    }
+    ;
+    EventMintRequested2.create = function(value0) {
+      return function(value1) {
+        return new EventMintRequested2(value0, value1);
+      };
+    };
+    return EventMintRequested2;
+  }();
+  var EventMintConfirmed = /* @__PURE__ */ function() {
+    function EventMintConfirmed2(value0, value1) {
+      this.value0 = value0;
+      this.value1 = value1;
+    }
+    ;
+    EventMintConfirmed2.create = function(value0) {
+      return function(value1) {
+        return new EventMintConfirmed2(value0, value1);
+      };
+    };
+    return EventMintConfirmed2;
+  }();
   var RequestMint = /* @__PURE__ */ function() {
     function RequestMint2(value0) {
       this.value0 = value0;
@@ -17844,34 +17907,34 @@
     };
     return RequestMint2;
   }();
-  var ConfirmMint = /* @__PURE__ */ function() {
-    function ConfirmMint2(value0) {
+  var HandleBackendEvent = /* @__PURE__ */ function() {
+    function HandleBackendEvent2(value0) {
       this.value0 = value0;
     }
     ;
-    ConfirmMint2.create = function(value0) {
-      return new ConfirmMint2(value0);
+    HandleBackendEvent2.create = function(value0) {
+      return new HandleBackendEvent2(value0);
     };
-    return ConfirmMint2;
+    return HandleBackendEvent2;
   }();
   var stateLogger = function(dictLogMessages) {
     var Bind1 = dictLogMessages.Now0().Monad0().Bind1();
     var discard15 = discard11(Bind1);
-    var bind27 = bind(Bind1);
+    var bind28 = bind(Bind1);
     var logInfo2 = logInfo(dictLogMessages);
     return function(ctx) {
       return function(action2) {
         return function(next) {
-          return discard15(bind27(ctx.getState)(function($56) {
+          return discard15(bind28(ctx.getState)(function($107) {
             return logInfo2(function(v) {
               return "Before state: " + v;
-            }(show10($56)));
+            }(show11($107)));
           }))(function() {
             return discard15(next(action2))(function() {
-              return bind27(ctx.getState)(function($57) {
+              return bind28(ctx.getState)(function($108) {
                 return logInfo2(function(v) {
                   return "After state: " + v;
-                }(show10($57)));
+                }(show11($108)));
               });
             });
           });
@@ -17879,31 +17942,84 @@
       };
     };
   };
+  var showEvent = {
+    show: function(v) {
+      if (v instanceof EventMintRequested) {
+        return "EventMintRequested " + (show17(v.value0) + (" " + show23(v.value1)));
+      }
+      ;
+      if (v instanceof EventMintConfirmed) {
+        return "EventMintConfirmed " + (show17(v.value0) + (" " + show23(v.value1)));
+      }
+      ;
+      throw new Error("Failed pattern match at Store (line 41, column 10 - line 45, column 62): " + [v.constructor.name]);
+    }
+  };
+  var show32 = /* @__PURE__ */ show(showEvent);
   var showAction = {
     show: function(v) {
       if (v instanceof RequestMint) {
         return "RequestMint " + show17(v.value0);
       }
       ;
-      if (v instanceof ConfirmMint) {
-        return "ConfirmMint " + show17(v.value0);
+      if (v instanceof HandleBackendEvent) {
+        return "HandleBackendEvent " + show32(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at Store (line 21, column 10 - line 23, column 53): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Store (line 28, column 10 - line 30, column 67): " + [v.constructor.name]);
     }
   };
-  var show23 = /* @__PURE__ */ show(showAction);
+  var show42 = /* @__PURE__ */ show(showAction);
+  var requestMintMiddleware = function(dictMinting) {
+    var Monad0 = dictMinting.Monad0();
+    var Bind1 = Monad0.Bind1();
+    var discard15 = discard11(Bind1);
+    var bind28 = bind(Bind1);
+    var mintAsset2 = mintAsset(dictMinting);
+    var pass5 = pass(Monad0.Applicative0());
+    return function(_ctx) {
+      return function(action2) {
+        return function(next) {
+          return discard15(next(action2))(function() {
+            if (action2 instanceof RequestMint) {
+              return bind28(mintAsset2(action2.value0))(function(v) {
+                if (v instanceof Just) {
+                  return next(new HandleBackendEvent(new EventMintRequested(action2.value0, v.value0)));
+                }
+                ;
+                if (v instanceof Nothing) {
+                  return pass5;
+                }
+                ;
+                throw new Error("Failed pattern match at Store (line 81, column 27 - line 83, column 23): " + [v.constructor.name]);
+              });
+            }
+            ;
+            return pass5;
+          });
+        };
+      };
+    };
+  };
   var reduce = function(state3) {
-    return function(action2) {
-      if (action2 instanceof RequestMint) {
-        return insert8(action2.value0)(MintRequested.value)(state3);
+    return function(v) {
+      if (v instanceof RequestMint) {
+        return insert8(v.value0)(new MintRequested(Nothing.value))(state3);
       }
       ;
-      if (action2 instanceof ConfirmMint) {
-        return insert8(action2.value0)(Minted.value)(state3);
+      if (v instanceof HandleBackendEvent) {
+        if (v.value0 instanceof EventMintRequested) {
+          return insert8(v.value0.value0)(new MintRequested(new Just(v.value0.value1)))(state3);
+        }
+        ;
+        if (v.value0 instanceof EventMintConfirmed) {
+          return insert8(v.value0.value0)(new MintConfirmed(v.value0.value1))(state3);
+        }
+        ;
+        throw new Error("Failed pattern match at Store (line 54, column 5 - line 58, column 52): " + [v.value0.constructor.name]);
       }
       ;
-      throw new Error("Failed pattern match at Store (line 26, column 23 - line 28, column 52): " + [action2.constructor.name]);
+      throw new Error("Failed pattern match at Store (line 51, column 16 - line 58, column 52): " + [v.constructor.name]);
     };
   };
   var actionLogger = function(dictLogMessages) {
@@ -17912,22 +18028,24 @@
     return function(_ctx) {
       return function(action2) {
         return function(next) {
-          return discard15(logInfo2("Action dispatched: " + show23(action2)))(function() {
+          return discard15(logInfo2("Action dispatched: " + show42(action2)))(function() {
             return next(action2);
           });
         };
       };
     };
   };
-  var middleware = function(dictLogMessages) {
-    return composeMiddlewareLtoR(stateLogger(dictLogMessages))(actionLogger(dictLogMessages));
-  };
   var useAssets = function(dictMonadEffect) {
     var makeStore2 = makeStore(dictMonadEffect);
     return function(dictEq) {
       var makeStore1 = makeStore2(dictEq);
       return function(dictLogMessages) {
-        return makeStore1("assets")(reduce)(empty2)(middleware(logMessagesHookM(dictLogMessages)));
+        var logMessagesHookM2 = logMessagesHookM(dictLogMessages);
+        var stateLogger1 = stateLogger(logMessagesHookM2);
+        var actionLogger1 = actionLogger(logMessagesHookM2);
+        return function(dictMinting) {
+          return makeStore1("assets")(reduce)(empty2)(composeMiddlewareLtoR(requestMintMiddleware(mintingHookM(dictMinting)))(composeMiddlewareLtoR(stateLogger1)(actionLogger1)));
+        };
       };
     };
   };
@@ -17935,7 +18053,7 @@
   // output/Yare.Component.Nft/index.js
   var eqMap2 = /* @__PURE__ */ eqMap(eqAsset)(eqMintStatus);
   var identity18 = /* @__PURE__ */ identity(categoryFn);
-  var bind21 = /* @__PURE__ */ bind(bindHookM);
+  var bind22 = /* @__PURE__ */ bind(bindHookM);
   var discard13 = /* @__PURE__ */ discard(discardUnit)(bindHookM);
   var pass3 = /* @__PURE__ */ pass(applicativeHookM);
   var type_19 = /* @__PURE__ */ type_17(isPropInputType);
@@ -17944,56 +18062,58 @@
     policy: /* @__PURE__ */ make(parsePolicy)(printPolicy)(""),
     tokenName: /* @__PURE__ */ make(parseTokenName)(printTokenName)("")
   };
-  var component5 = function(dictLogMessages) {
-    return function(dictMonadEffect) {
-      var useAssets2 = useAssets(dictMonadEffect)(eqMap2)(dictLogMessages);
-      return component4(function(_tokens) {
-        return function(_input) {
-          return bind11(useAssets2(identity18))(function(v) {
-            return bind11(useState(initialState))(function(v1) {
-              var updateTokenName = function(str) {
-                return modify_3(v1.value1)(function(s) {
-                  return {
-                    policy: s.policy,
-                    tokenName: update(s.tokenName)(str)
-                  };
-                });
-              };
-              var updatePolicy = function(str) {
-                return modify_3(v1.value1)(function(s) {
-                  return {
-                    tokenName: s.tokenName,
-                    policy: update(s.policy)(str)
-                  };
-                });
-              };
-              var onSubmit = bind21(get3(v1.value1))(function(v2) {
-                var v3 = result(v2.tokenName);
-                var v4 = result(v2.policy);
-                if (v4 instanceof Just && v3 instanceof Just) {
-                  return discard13(put3(v1.value1)(initialState))(function() {
-                    return v.value1.dispatch(new RequestMint(nativeToken(v4.value0)(v3.value0)));
+  var component5 = function(dictMinting) {
+    return function(dictLogMessages) {
+      return function(dictMonadEffect) {
+        var useAssets2 = useAssets(dictMonadEffect)(eqMap2)(dictLogMessages)(dictMinting);
+        return component4(function(_tokens) {
+          return function(_input) {
+            return bind17(useAssets2(identity18))(function(v) {
+              return bind17(useState(initialState))(function(v1) {
+                var updateTokenName = function(str) {
+                  return modify_3(v1.value1)(function(s) {
+                    return {
+                      policy: s.policy,
+                      tokenName: update(s.tokenName)(str)
+                    };
                   });
-                }
-                ;
-                return pass3;
+                };
+                var updatePolicy = function(str) {
+                  return modify_3(v1.value1)(function(s) {
+                    return {
+                      tokenName: s.tokenName,
+                      policy: update(s.policy)(str)
+                    };
+                  });
+                };
+                var onSubmit = bind22(get3(v1.value1))(function(v2) {
+                  var v3 = result(v2.tokenName);
+                  var v4 = result(v2.policy);
+                  if (v4 instanceof Just && v3 instanceof Just) {
+                    return discard13(put3(v1.value1)(initialState))(function() {
+                      return v.value1.dispatch(new RequestMint(nativeToken(v4.value0)(v3.value0)));
+                    });
+                  }
+                  ;
+                  return pass3;
+                });
+                return pure18(layout("NFT")(sidebar(new Nft(Mint.value)))([div2([css("box")])([div2([css("field")])([label4([css("label"), $$for("policy")])([text5("Policy ID")]), div2([css("control has-icons-left")])([input2([css("input is-family-code"), type_19(InputText.value), id2("policy"), name15("policy"), value15(value14(v1.value0.policy)), required4(true), placeholder3("Hex-encoded"), onValueInput(updatePolicy)]), span3([css("icon is-small is-left")])([i([css("fas fa-thumbtack")])([])])]), maybeElem(error3(v1.value0.policy))(function(err) {
+                  return p([css("help is-danger")])([text5(err)]);
+                })]), div2([css("field")])([label4([css("label"), $$for("tokenName")])([text5("Token Name")]), div2([css("control has-icons-left")])([input2([css("input is-family-code"), type_19(InputText.value), id2("tokenName"), name15("tokenName"), value15(value14(v1.value0.tokenName)), required4(true), placeholder3("e.g. MyNFT"), onValueInput(updateTokenName)]), span3([css("icon is-small is-left")])([i([css("fas fa-clipboard")])([])])]), maybeElem(error3(v1.value0.tokenName))(function(err) {
+                  return p([css("help is-danger")])([text5(err)]);
+                })]), div2([css("field")])([div2([css("control")])([button([css("button is-link"), onClick(function(_mouseEvent) {
+                  return onSubmit;
+                }), disabled10(!(hasResult(v1.value0.policy) && hasResult(v1.value0.tokenName)))])([text5("Initiate Minting")])])])])]));
               });
-              return pure18(layout("NFT")(sidebar(new Nft(Mint.value)))([div2([css("box")])([div2([css("field")])([label4([css("label"), $$for("policy")])([text5("Policy ID")]), div2([css("control has-icons-left")])([input2([css("input is-family-code"), type_19(InputText.value), id2("policy"), name15("policy"), value15(value14(v1.value0.policy)), required4(true), placeholder3("Hex-encoded"), onValueInput(updatePolicy)]), span3([css("icon is-small is-left")])([i([css("fas fa-thumbtack")])([])])]), maybeElem(error3(v1.value0.policy))(function(err) {
-                return p([css("help is-danger")])([text5(err)]);
-              })]), div2([css("field")])([label4([css("label"), $$for("tokenName")])([text5("Token Name")]), div2([css("control has-icons-left")])([input2([css("input is-family-code"), type_19(InputText.value), id2("tokenName"), name15("tokenName"), value15(value14(v1.value0.tokenName)), required4(true), placeholder3("e.g. MyNFT"), onValueInput(updateTokenName)]), span3([css("icon is-small is-left")])([i([css("fas fa-clipboard")])([])])]), maybeElem(error3(v1.value0.tokenName))(function(err) {
-                return p([css("help is-danger")])([text5(err)]);
-              })]), div2([css("field")])([div2([css("control")])([button([css("button is-link"), onClick(function(_mouseEvent) {
-                return onSubmit;
-              }), disabled10(!(hasResult(v1.value0.policy) && hasResult(v1.value0.tokenName)))])([text5("Initiate Minting")])])])])]));
             });
-          });
-        };
-      });
+          };
+        });
+      };
     };
   };
 
   // output/Yare.Component.Scripts/index.js
-  var bind22 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind23 = /* @__PURE__ */ bind(bindHalogenM);
   var put7 = /* @__PURE__ */ put(monadStateHalogenM);
   var Initialize5 = /* @__PURE__ */ function() {
     function Initialize9() {
@@ -18046,7 +18166,7 @@
       }()]);
     };
     var handleAction = function(v) {
-      return bind22(getScripts2)(function(v1) {
+      return bind23(getScripts2)(function(v1) {
         if (v1 instanceof Nothing) {
           return put7(new Failure("No info about Scripts is available"));
         }
@@ -18072,8 +18192,8 @@
   };
 
   // output/Yare.Component.Transactions/index.js
-  var show11 = /* @__PURE__ */ show(showInt);
-  var bind23 = /* @__PURE__ */ bind(bindHalogenM);
+  var show18 = /* @__PURE__ */ show(showInt);
+  var bind24 = /* @__PURE__ */ bind(bindHalogenM);
   var put8 = /* @__PURE__ */ put(monadStateHalogenM);
   var Initialize6 = /* @__PURE__ */ function() {
     function Initialize9() {
@@ -18091,14 +18211,14 @@
       ;
       return table([css("table")])([thead_([tr_([th_([text5("#")]), th_([text5("Submitted")])])]), tbody_(mapWithIndex3(function(index6) {
         return function(txId2) {
-          return tr_([td_([text5(show11(index6))]), td_([txId(txId2)])]);
+          return tr_([td_([text5(show18(index6))]), td_([txId(txId2)])]);
         };
       })(v))]);
     };
     var renderInLedger = function(inLedger) {
       return table([css("table")])([thead_([tr_([th_([text5("#")]), th_([text5("In Ledger")])])]), tbody_(mapWithIndex3(function(index6) {
         return function(txId2) {
-          return tr_([td_([text5(show11(index6))]), td_([txId(txId2)])]);
+          return tr_([td_([text5(show18(index6))]), td_([txId(txId2)])]);
         };
       })(inLedger))]);
     };
@@ -18127,7 +18247,7 @@
       }()]);
     };
     var handleAction = function(v) {
-      return bind23(getTransactions2)(function(v1) {
+      return bind24(getTransactions2)(function(v1) {
         if (v1 instanceof Nothing) {
           return put8(new Failure("No info about transactions is available"));
         }
@@ -18153,9 +18273,9 @@
   };
 
   // output/Yare.Component.UTxO/index.js
-  var show18 = /* @__PURE__ */ show(showInt);
-  var show19 = /* @__PURE__ */ show(showBigInt);
-  var bind24 = /* @__PURE__ */ bind(bindHalogenM);
+  var show19 = /* @__PURE__ */ show(showInt);
+  var show110 = /* @__PURE__ */ show(showBigInt);
+  var bind25 = /* @__PURE__ */ bind(bindHalogenM);
   var put9 = /* @__PURE__ */ put(monadStateHalogenM);
   var Initialize7 = /* @__PURE__ */ function() {
     function Initialize9() {
@@ -18171,7 +18291,7 @@
         return function(v) {
           return tr_(function() {
             var v1 = splitTxIn(v.txIn);
-            return [td([css("is-family-code")])([text5(show18(index6))]), td([css("is-family-code")])([address2(v.address)]), td([css("is-family-code")])([txId(v1.txId)]), td([css("is-family-code")])([text5(show18(v1.txIx))]), td([css("is-family-code")])([text5(show19(valueLovelace(v.value)))])];
+            return [td([css("is-family-code")])([text5(show19(index6))]), td([css("is-family-code")])([address2(v.address)]), td([css("is-family-code")])([txId(v1.txId)]), td([css("is-family-code")])([text5(show19(v1.txIx))]), td([css("is-family-code")])([text5(show110(valueLovelace(v.value)))])];
           }());
         };
       })(utxos))]);
@@ -18198,7 +18318,7 @@
       }()]);
     };
     var handleAction = function(v) {
-      return bind24(getUTxO2)(function(v1) {
+      return bind25(getUTxO2)(function(v1) {
         if (v1 instanceof Nothing) {
           return put9(new Failure("No UTxO info available"));
         }
@@ -18260,7 +18380,7 @@
       return "nft_mint";
     }
   })(ordUnit);
-  var bind25 = /* @__PURE__ */ bind(bindHalogenM);
+  var bind26 = /* @__PURE__ */ bind(bindHalogenM);
   var map45 = /* @__PURE__ */ map(functorHalogenM);
   var get7 = /* @__PURE__ */ get(monadStateHalogenM);
   var discard14 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
@@ -18293,104 +18413,107 @@
     var liftEffect9 = liftEffect(monadEffectHalogenM(MonadEffect0));
     return function(dictMonadAsk) {
       return function(dictNow) {
-        return function(dictLogMessages) {
-          var component1 = component5(dictLogMessages)(MonadEffect0);
-          return function(dictHasNetworkInfo) {
-            var component22 = component3(dictHasNetworkInfo);
-            return function(dictHasTransactions) {
-              var component32 = component7(dictHasTransactions);
-              return function(dictHasAddresses) {
-                var component42 = component(dictHasAddresses);
-                return function(dictHasScripts) {
-                  var component52 = component6(dictHasScripts);
-                  return function(dictHasUTxO) {
-                    var component62 = component8(dictHasUTxO);
-                    return function(dictNavigate) {
-                      var component72 = component2(dictNavigate);
-                      var navigate2 = navigate(navigateHalogenM(dictNavigate));
-                      var render = function(v) {
-                        if (v.route instanceof Just) {
-                          if (v.route.value0 instanceof Home) {
-                            return slot_1($$Proxy.value)(unit)(component72)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof UTxO) {
-                            return slot_22($$Proxy.value)(unit)(component62)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof Transactions) {
-                            return slot_3($$Proxy.value)(unit)(component32)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof Network) {
-                            return slot_4($$Proxy.value)(unit)(component22)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof Addresses) {
-                            return slot_5($$Proxy.value)(unit)(component42)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof Scripts) {
-                            return slot_6($$Proxy.value)(unit)(component52)(unit);
-                          }
-                          ;
-                          if (v.route.value0 instanceof Nft) {
-                            return slot_7($$Proxy.value)(unit)(component1)(unit);
-                          }
-                          ;
-                          throw new Error("Failed pattern match at Yare.Component.Router (line 98, column 14 - line 112, column 61): " + [v.route.value0.constructor.name]);
-                        }
-                        ;
-                        if (v.route instanceof Nothing) {
-                          return div_([text5("Oh no! That page wasn't found.")]);
-                        }
-                        ;
-                        throw new Error("Failed pattern match at Yare.Component.Router (line 97, column 22 - line 115, column 59): " + [v.route.constructor.name]);
-                      };
-                      var initialize = bind25(map45(function() {
-                        var $77 = parse7(routeCodec);
-                        return function($78) {
-                          return hush($77($78));
-                        };
-                      }())(liftEffect9(getHash)))(function(initialRoute) {
-                        return navigate2(fromMaybe(Home.value)(initialRoute));
-                      });
-                      var handleQuery = function(v) {
-                        return bind25(get7)(function(v1) {
-                          return discard14(when6(notEq2(v1.route)(new Just(v.value0)))(modify_5(function(v2) {
-                            var $70 = {};
-                            for (var $71 in v2) {
-                              if ({}.hasOwnProperty.call(v2, $71)) {
-                                $70[$71] = v2[$71];
-                              }
-                              ;
+        return function(dictMinting) {
+          var component1 = component5(dictMinting);
+          return function(dictLogMessages) {
+            var component22 = component1(dictLogMessages)(MonadEffect0);
+            return function(dictHasNetworkInfo) {
+              var component32 = component3(dictHasNetworkInfo);
+              return function(dictHasTransactions) {
+                var component42 = component7(dictHasTransactions);
+                return function(dictHasAddresses) {
+                  var component52 = component(dictHasAddresses);
+                  return function(dictHasScripts) {
+                    var component62 = component6(dictHasScripts);
+                    return function(dictHasUTxO) {
+                      var component72 = component8(dictHasUTxO);
+                      return function(dictNavigate) {
+                        var component82 = component2(dictNavigate);
+                        var navigate2 = navigate(navigateHalogenM(dictNavigate));
+                        var render = function(v) {
+                          if (v.route instanceof Just) {
+                            if (v.route.value0 instanceof Home) {
+                              return slot_1($$Proxy.value)(unit)(component82)(unit);
                             }
                             ;
-                            $70.route = new Just(v.value0);
-                            return $70;
-                          })))(function() {
-                            return pure24(new Just(v.value1));
+                            if (v.route.value0 instanceof UTxO) {
+                              return slot_22($$Proxy.value)(unit)(component72)(unit);
+                            }
+                            ;
+                            if (v.route.value0 instanceof Transactions) {
+                              return slot_3($$Proxy.value)(unit)(component42)(unit);
+                            }
+                            ;
+                            if (v.route.value0 instanceof Network) {
+                              return slot_4($$Proxy.value)(unit)(component32)(unit);
+                            }
+                            ;
+                            if (v.route.value0 instanceof Addresses) {
+                              return slot_5($$Proxy.value)(unit)(component52)(unit);
+                            }
+                            ;
+                            if (v.route.value0 instanceof Scripts) {
+                              return slot_6($$Proxy.value)(unit)(component62)(unit);
+                            }
+                            ;
+                            if (v.route.value0 instanceof Nft) {
+                              return slot_7($$Proxy.value)(unit)(component22)(unit);
+                            }
+                            ;
+                            throw new Error("Failed pattern match at Yare.Component.Router (line 100, column 14 - line 114, column 61): " + [v.route.value0.constructor.name]);
+                          }
+                          ;
+                          if (v.route instanceof Nothing) {
+                            return div_([text5("Oh no! That page wasn't found.")]);
+                          }
+                          ;
+                          throw new Error("Failed pattern match at Yare.Component.Router (line 99, column 22 - line 117, column 59): " + [v.route.constructor.name]);
+                        };
+                        var initialize = bind26(map45(function() {
+                          var $79 = parse7(routeCodec);
+                          return function($80) {
+                            return hush($79($80));
+                          };
+                        }())(liftEffect9(getHash)))(function(initialRoute) {
+                          return navigate2(fromMaybe(Home.value)(initialRoute));
+                        });
+                        var handleQuery = function(v) {
+                          return bind26(get7)(function(v1) {
+                            return discard14(when6(notEq2(v1.route)(new Just(v.value0)))(modify_5(function(v2) {
+                              var $72 = {};
+                              for (var $73 in v2) {
+                                if ({}.hasOwnProperty.call(v2, $73)) {
+                                  $72[$73] = v2[$73];
+                                }
+                                ;
+                              }
+                              ;
+                              $72.route = new Just(v.value0);
+                              return $72;
+                            })))(function() {
+                              return pure24(new Just(v.value1));
+                            });
                           });
+                        };
+                        var handleAction = function(v) {
+                          return initialize;
+                        };
+                        return mkComponent({
+                          initialState: function(_input) {
+                            return {
+                              route: Nothing.value
+                            };
+                          },
+                          render,
+                          "eval": mkEval({
+                            receive: defaultEval.receive,
+                            finalize: defaultEval.finalize,
+                            handleQuery,
+                            handleAction,
+                            initialize: new Just(Initialize8.value)
+                          })
                         });
                       };
-                      var handleAction = function(v) {
-                        return initialize;
-                      };
-                      return mkComponent({
-                        initialState: function(_input) {
-                          return {
-                            route: Nothing.value
-                          };
-                        },
-                        render,
-                        "eval": mkEval({
-                          receive: defaultEval.receive,
-                          finalize: defaultEval.finalize,
-                          handleQuery,
-                          handleAction,
-                          initialize: new Just(Initialize8.value)
-                        })
-                      });
                     };
                   };
                 };
@@ -18403,25 +18526,25 @@
   };
 
   // output/Main/index.js
-  var bind26 = /* @__PURE__ */ bind(bindAff);
+  var bind27 = /* @__PURE__ */ bind(bindAff);
   var hoist5 = /* @__PURE__ */ hoist3(functorAff);
-  var component10 = /* @__PURE__ */ component9(monadAffAppM)(monadAsk)(nowAppM)(logMessagesAppM)(hasNetworkInfoAppM)(hasTransactionsAppM)(hasAddressesAppM)(hasScriptsAppM)(hasUTxOAppM)(navigateAppM);
+  var component10 = /* @__PURE__ */ component9(monadAffAppM)(monadAsk)(nowAppM)(mintingAppM)(logMessagesAppM)(hasNetworkInfoAppM)(hasTransactionsAppM)(hasAddressesAppM)(hasScriptsAppM)(hasUTxOAppM)(navigateAppM);
   var $$void9 = /* @__PURE__ */ $$void(functorAff);
   var liftEffect8 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var matchesWith2 = /* @__PURE__ */ matchesWith(foldableEither);
   var when7 = /* @__PURE__ */ when(applicativeEffect);
   var notEq3 = /* @__PURE__ */ notEq(/* @__PURE__ */ eqMaybe(eqRoute));
   var pass4 = /* @__PURE__ */ pass(applicativeAff);
-  var main2 = /* @__PURE__ */ runHalogenAff(/* @__PURE__ */ bind26(awaitBody)(function(body3) {
+  var main2 = /* @__PURE__ */ runHalogenAff(/* @__PURE__ */ bind27(awaitBody)(function(body3) {
     var config = {
       baseUrl: "http://localhost:9999/api",
       logLevel: Dev.value
     };
     var rootComponent = hoist5(runAppM(config))(component10);
-    return bind26(runUI2(rootComponent)(unit)(body3))(function(halogenIO) {
+    return bind27(runUI2(rootComponent)(unit)(body3))(function(halogenIO) {
       return $$void9(liftEffect8(matchesWith2(parse7(routeCodec))(function(old) {
         return function($$new2) {
-          return when7(notEq3(old)(new Just($$new2)))(launchAff_(bind26(halogenIO.query(mkTell(Navigate.create($$new2))))(function(_response) {
+          return when7(notEq3(old)(new Just($$new2)))(launchAff_(bind27(halogenIO.query(mkTell(Navigate.create($$new2))))(function(_response) {
             return pass4;
           })));
         };

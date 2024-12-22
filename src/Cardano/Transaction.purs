@@ -17,6 +17,8 @@ newtype TxIn = TxIn String
 renderTxIn ∷ TxIn → String
 renderTxIn (TxIn txIn) = txIn
 
+derive newtype instance eqTxIn ∷ Eq TxIn
+derive instance newtypeTxIn ∷ Newtype TxIn _
 instance Show TxIn where
   show = renderTxIn
 
@@ -42,10 +44,10 @@ newtype TxId = TxId String
 renderTxId ∷ TxId → String
 renderTxId (TxId txId) = txId
 
+derive newtype instance eqTxId ∷ Eq TxId
+derive instance newtypeTxId ∷ Newtype TxId _
 instance Show TxId where
   show = renderTxId
-
-derive instance newtypeTxId ∷ Newtype TxId _
 
 codecTxId ∷ JsonCodec TxId
 codecTxId = CA.coercible "TxId" CA.string
@@ -58,10 +60,10 @@ newtype TxIx = TxIx Int
 renderTxIx ∷ TxIx → String
 renderTxIx (TxIx txIx) = show txIx
 
+derive newtype instance eqTxIx ∷ Eq TxIx
+derive instance newtypeTxIx ∷ Newtype TxIx _
 instance Show TxIx where
   show = renderTxIx
-
-derive instance newtypeTxIx ∷ Newtype TxIx _
 
 codecTxIx ∷ JsonCodec TxIx
 codecTxIx = CA.coercible "TxIx" CA.int

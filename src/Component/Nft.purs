@@ -20,12 +20,8 @@ import Halogen.Hooks as Hooks
 import Store (Action(..))
 import Store as Store
 import Yare.Capability.LogMessages (class LogMessages)
+import Yare.Capability.Resource.Minting (class Minting)
 import Yare.Data.Route as Route
-
-data Action
-  = SubmitForm
-  | UpdatePolicy String
-  | UpdateTokenName String
 
 type Error = String
 type Input = Unit
@@ -34,7 +30,12 @@ type State =
   , tokenName ∷ Field TokenName
   }
 
-component ∷ ∀ q i o m. LogMessages m ⇒ MonadEffect m ⇒ H.Component q i o m
+component
+  ∷ ∀ q i o m
+  . Minting m
+  ⇒ LogMessages m
+  ⇒ MonadEffect m
+  ⇒ H.Component q i o m
 component = Hooks.component \_tokens _input → Hooks.do
   _ /\ assets ← Store.useAssets identity
   st /\ stId ← Hooks.useState initialState

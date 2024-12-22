@@ -10,6 +10,7 @@ import Cardano.Value.Asset (Asset, codecAsset)
 import Control.Monad.Trans.Class (lift)
 import Data.Codec.Argonaut as CA
 import Halogen (HalogenM)
+import Halogen.Hooks (HookM)
 import Yare.Api.Endpoint (Endpoint(..))
 import Yare.Api.Request (RequestMethod(..))
 import Yare.Api.Utils as Api
@@ -29,3 +30,5 @@ instance Minting AppM where
 instance Minting m ⇒ Minting (HalogenM st act slots msg m) where
   mintAsset = lift <<< mintAsset
 
+instance Minting m ⇒ Minting (HookM m) where
+  mintAsset = lift <<< mintAsset

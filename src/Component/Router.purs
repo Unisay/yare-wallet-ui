@@ -16,6 +16,7 @@ import Yare.Capability.LogMessages (class LogMessages)
 import Yare.Capability.Navigate (class Navigate, navigate)
 import Yare.Capability.Now (class Now)
 import Yare.Capability.Resource.Addresses (class HasAddresses)
+import Yare.Capability.Resource.Minting (class Minting)
 import Yare.Capability.Resource.NetworkInfo (class HasNetworkInfo)
 import Yare.Capability.Resource.Scripts (class HasScripts)
 import Yare.Capability.Resource.Transactions (class HasTransactions)
@@ -59,6 +60,7 @@ component
   . MonadAff m
   ⇒ MonadAsk Config m
   ⇒ Now m
+  ⇒ Minting m
   ⇒ LogMessages m
   ⇒ HasNetworkInfo m
   ⇒ HasTransactions m
