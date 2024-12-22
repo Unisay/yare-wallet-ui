@@ -11,136 +11,116 @@ import Component.Html.Sidebar (sidebar)
 import Data.Form.Field (Field)
 import Data.Form.Field as Field
 import Effect.Class (class MonadEffect)
-import Event as Event
 import Halogen as H
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Extended (css)
 import Halogen.HTML.Extended as HH
 import Halogen.HTML.Properties as HP
-import Halogen.Subscription as HS
+import Halogen.Hooks as Hooks
+import Store (Action(..))
+import Store as Store
 import Yare.Capability.LogMessages (class LogMessages)
-import Yare.Capability.Now (class Now)
+import Yare.Capability.Resource.Minting (class Minting)
 import Yare.Data.Route as Route
 
-data Action
-  = SubmitForm
-  | UpdatePolicy String
-  | UpdateTokenName String
-
 type Error = String
-
+type Input = Unit
 type State =
   { policy ∷ Field Policy
   , tokenName ∷ Field TokenName
-  , eventListener ∷ HS.Listener Event.MintingInitiated
   }
-
-type Input = HS.Listener Event.MintingInitiated
 
 component
-  ∷ ∀ q o m
-  . Now m
+  ∷ ∀ q i o m
+  . Minting m
   ⇒ LogMessages m
   ⇒ MonadEffect m
-  ⇒ H.Component q Input o m
-component = H.mkComponent
-  { initialState
-  , render
-  , eval: H.mkEval $ H.defaultEval { handleAction = handleAction }
-  }
+  ⇒ H.Component q i o m
+component = Hooks.component \_tokens _input → Hooks.do
+  _ /\ assets ← Store.useAssets identity
+  st /\ stId ← Hooks.useState initialState
 
-  where
+  let
+    updatePolicy str = Hooks.modify_ stId \s →
+      s { policy = Field.update s.policy str }
 
-  initialState ∷ Input → State
-  initialState eventListener =
-    { policy: Field.make parsePolicy printPolicy ""
-    , tokenName: Field.make parseTokenName printTokenName ""
-    , eventListener
-    }
+    updateTokenName str = Hooks.modify_ stId \s →
+      s { tokenName = Field.update s.tokenName str }
 
-  handleAction ∷ ∀ slots. Action → H.HalogenM State Action slots o m Unit
-  handleAction = case _ of
-    UpdatePolicy policy →
-      H.modify_ \s → s { policy = Field.update s.policy policy }
-
-    UpdateTokenName tokenName →
-      H.modify_ \s → s { tokenName = Field.update s.tokenName tokenName }
-
-    SubmitForm → do
-      { policy, tokenName, eventListener } ← H.get
+    onSubmit = do
+      { policy, tokenName } ← Hooks.get stId
       case Field.result policy, Field.result tokenName of
         Just p, Just t → do
-          let asset = nativeToken p t
-          resetForm
-          H.liftEffect $ HS.notify eventListener (Event.MintingInitiated asset)
+          Hooks.put stId initialState -- reset form
+          assets.dispatch (RequestMint (nativeToken p t))
         _, _ → pass
 
-    where
+  Hooks.pure do
+    layout "NFT" (sidebar (Route.Nft Route.Mint))
+      [ HH.div [ css "box" ]
+          [ HH.div [ css "field" ]
+              [ HH.label
+                  [ css "label", HP.for "policy" ]
+                  [ HH.text "Policy ID" ]
+              , HH.div [ css "control has-icons-left" ]
+                  [ HH.input
+                      [ css "input is-family-code"
+                      , HP.type_ HP.InputText
+                      , HP.id "policy"
+                      , HP.name "policy"
+                      , HP.value (Field.value st.policy)
+                      , HP.required true
+                      , HP.placeholder "Hex-encoded"
+                      , HE.onValueInput updatePolicy
+                      ]
+                  , HH.span
+                      [ css "icon is-small is-left" ]
+                      [ HH.i [ css "fas fa-thumbtack" ] [] ]
+                  ]
+              , HH.maybeElem (Field.error st.policy) \err →
+                  HH.p [ css "help is-danger" ] [ HH.text err ]
+              ]
+          , HH.div [ css "field" ]
+              [ HH.label
+                  [ css "label", HP.for "tokenName" ]
+                  [ HH.text "Token Name" ]
+              , HH.div [ css "control has-icons-left" ]
+                  [ HH.input
+                      [ css "input is-family-code"
+                      , HP.type_ HP.InputText
+                      , HP.id "tokenName"
+                      , HP.name "tokenName"
+                      , HP.value (Field.value st.tokenName)
+                      , HP.required true
+                      , HP.placeholder "e.g. MyNFT"
+                      , HE.onValueInput updateTokenName
+                      ]
+                  , HH.span
+                      [ css "icon is-small is-left" ]
+                      [ HH.i [ css "fas fa-clipboard" ] [] ]
+                  ]
+              , HH.maybeElem (Field.error st.tokenName) \err →
+                  HH.p [ css "help is-danger" ] [ HH.text err ]
+              ]
+          , HH.div [ css "field" ]
+              [ HH.div [ css "control" ]
+                  [ HH.button
+                      [ css "button is-link"
+                      , HE.onClick \_mouseEvent → onSubmit
+                      , HP.disabled $ not
+                          ( Field.hasResult st.policy
+                              && Field.hasResult st.tokenName
+                          )
+                      ]
+                      [ HH.text "Initiate Minting" ]
+                  ]
+              ]
+          ]
+      ]
 
-    resetForm ∷ H.HalogenM State Action slots o m Unit
-    resetForm = H.put <<< initialState =<< H.gets _.eventListener
-
-render ∷ ∀ m slots. State → H.ComponentHTML Action slots m
-render st =
-  layout "NFT" (sidebar (Route.Nft Route.Mint))
-    [ HH.div [ css "box" ]
-        [ HH.div [ css "field" ]
-            [ HH.label
-                [ css "label", HP.for "policy" ]
-                [ HH.text "Policy ID" ]
-            , HH.div [ css "control has-icons-left" ]
-                [ HH.input
-                    [ css "input is-family-code"
-                    , HP.type_ HP.InputText
-                    , HP.id "policy"
-                    , HP.name "policy"
-                    , HP.value (Field.value st.policy)
-                    , HP.required true
-                    , HP.placeholder "Hex-encoded"
-                    , HE.onValueInput UpdatePolicy
-                    ]
-                , HH.span
-                    [ css "icon is-small is-left" ]
-                    [ HH.i [ css "fas fa-thumbtack" ] [] ]
-                ]
-            , HH.maybeElem (Field.error st.policy) \err →
-                HH.p [ css "help is-danger" ] [ HH.text err ]
-            ]
-        , HH.div [ css "field" ]
-            [ HH.label
-                [ css "label", HP.for "tokenName" ]
-                [ HH.text "Token Name" ]
-            , HH.div [ css "control has-icons-left" ]
-                [ HH.input
-                    [ css "input is-family-code"
-                    , HP.type_ HP.InputText
-                    , HP.id "tokenName"
-                    , HP.name "tokenName"
-                    , HP.value (Field.value st.tokenName)
-                    , HP.required true
-                    , HP.placeholder "e.g. MyNFT"
-                    , HE.onValueInput UpdateTokenName
-                    ]
-                , HH.span
-                    [ css "icon is-small is-left" ]
-                    [ HH.i [ css "fas fa-clipboard" ] [] ]
-                ]
-            , HH.maybeElem (Field.error st.tokenName) \err →
-                HH.p [ css "help is-danger" ] [ HH.text err ]
-            ]
-        , HH.div [ css "field" ]
-            [ HH.div [ css "control" ]
-                [ HH.button
-                    [ css "button is-link"
-                    , HE.onClick \_event → SubmitForm
-                    , HP.disabled $ not
-                        ( Field.hasResult st.policy
-                            && Field.hasResult st.tokenName
-                        )
-                    ]
-                    [ HH.text "Initiate Minting" ]
-                ]
-            ]
-        ]
-    ]
+initialState ∷ State
+initialState =
+  { policy: Field.make parsePolicy printPolicy ""
+  , tokenName: Field.make parseTokenName printTokenName ""
+  }
 

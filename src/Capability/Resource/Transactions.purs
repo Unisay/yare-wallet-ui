@@ -1,4 +1,9 @@
-module Yare.Capability.Resource.Transactions where
+module Yare.Capability.Resource.Transactions
+  ( Transactions
+  , class HasTransactions
+  , getTransactions
+  , codecTransactions
+  ) where
 
 import Custom.Prelude
 
@@ -28,7 +33,7 @@ class Monad m ⇐ HasTransactions m where
   getTransactions ∷ m (Maybe Transactions)
 
 instance HasTransactions AppM where
-  getTransactions = 
+  getTransactions =
     Api.mkRequest { endpoint: Endpoint.Transactions, method: Get } >>=
       Api.handleResponseErrors codecTransactions hush
 

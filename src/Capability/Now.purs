@@ -8,6 +8,7 @@ import Data.DateTime.Instant (Instant)
 import Effect (Effect)
 import Effect.Now as Now
 import Halogen (HalogenM)
+import Halogen.Hooks (HookM)
 
 class Monad m ⇐ Now m where
   now ∷ m Instant
@@ -22,6 +23,12 @@ instance nowEffect ∷ Now Effect where
   nowDateTime = Now.nowDateTime
 
 instance nowHalogenM ∷ Now m ⇒ Now (HalogenM st act slots msg m) where
+  now = lift now
+  nowDate = lift nowDate
+  nowTime = lift nowTime
+  nowDateTime = lift nowDateTime
+
+instance nowHookM ∷ Now m ⇒ Now (HookM m) where
   now = lift now
   nowDate = lift nowDate
   nowTime = lift nowTime

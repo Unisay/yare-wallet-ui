@@ -3,7 +3,6 @@ module Yare.Capability.Resource.Addresses where
 import Custom.Prelude
 
 import Cardano.Types (Address, codecAddress)
-import Control.Alternative (empty)
 import Control.Monad.Trans.Class (lift)
 import Data.Codec.Argonaut (JsonCodec)
 import Data.Codec.Argonaut as CA

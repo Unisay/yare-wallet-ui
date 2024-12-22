@@ -18,6 +18,7 @@ import Type.Proxy (Proxy(..))
 data Asset = Ada | NativeToken { policy ∷ Policy, name ∷ TokenName }
 
 derive instance eqAsset ∷ Eq Asset
+derive instance ordAsset ∷ Ord Asset
 
 instance showAsset ∷ Show Asset where
   show Ada = "Ada"
@@ -38,8 +39,9 @@ codecAsset = dimap toVariant fromVariant do
     }
 
   where
-  toVariant = case _ of
-    Ada → Variant.inj (Proxy @"ada") unit
-    NativeToken nt → Variant.inj (Proxy @"nativeToken") nt
+  toVariant =
+    case _ of
+      Ada → Variant.inj (Proxy @"ada") unit
+      NativeToken nt → Variant.inj (Proxy @"nativeToken") nt
   fromVariant =
     Variant.match { ada: \_ → Ada, nativeToken: NativeToken }
