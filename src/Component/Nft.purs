@@ -19,6 +19,7 @@ import Halogen.HTML.Properties as HP
 import Halogen.Hooks as Hooks
 import Store (Action(..))
 import Store as Store
+import Web.UIEvent.KeyboardEvent as KE
 import Yare.Capability.LogMessages (class LogMessages)
 import Yare.Capability.Resource.Minting (class Minting)
 import Yare.Data.Route as Route
@@ -56,9 +57,19 @@ component = Hooks.component \_tokens _input → Hooks.do
         _, _ → pass
 
   Hooks.pure do
+    let
+      formIsDisabled = not do
+        Field.hasResult st.policy
+          && Field.hasResult st.tokenName
+
+      submitOnEnter keyboardEvent =
+        case KE.code keyboardEvent of
+          "Enter" → onSubmit
+          _ → pass
+
     layout "NFT" (sidebar (Route.Nft Route.Mint))
       [ HH.div [ css "box" ]
-          [ HH.div [ css "field" ]
+          [ HH.div [ css "field"]
               [ HH.label
                   [ css "label", HP.for "policy" ]
                   [ HH.text "Policy ID" ]
@@ -72,6 +83,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                       , HP.required true
                       , HP.placeholder "Hex-encoded"
                       , HE.onValueInput updatePolicy
+                      , HE.onKeyDown submitOnEnter
                       ]
                   , HH.span
                       [ css "icon is-small is-left" ]
@@ -94,6 +106,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                       , HP.required true
                       , HP.placeholder "e.g. MyNFT"
                       , HE.onValueInput updateTokenName
+                      , HE.onKeyDown submitOnEnter
                       ]
                   , HH.span
                       [ css "icon is-small is-left" ]
@@ -107,10 +120,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                   [ HH.button
                       [ css "button is-link"
                       , HE.onClick \_mouseEvent → onSubmit
-                      , HP.disabled $ not
-                          ( Field.hasResult st.policy
-                              && Field.hasResult st.tokenName
-                          )
+                      , HP.disabled formIsDisabled
                       ]
                       [ HH.text "Initiate Minting" ]
                   ]
