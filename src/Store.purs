@@ -3,23 +3,24 @@ module Store where
 import Custom.Prelude hiding ((|>))
 
 import Cardano.Transaction (TxId)
-import Cardano.Value.Asset (Asset)
+import Cardano.Value.Asset (NativeAsset)
 import Cardano.Value.Asset.MintStatus (MintStatus(..))
+import Cardano.Value.Token.Name (TokenName)
 import Data.Map (Map)
 import Data.Map as Map
 import Effect.Class (class MonadEffect)
 import Halogen.Helix (HelixMiddleware, UseHelixHook, makeStore, (|>))
 import Halogen.Hooks (Hook, StateId, UseState, useState)
 import Yare.Capability.LogMessages (class LogMessages, logInfo)
-import Yare.Capability.Resource.Minting (class Minting, mintAsset)
+import Yare.Capability.Resource.Assets (class Assets, mintAsset)
 
-type State = Map Asset MintStatus
+type State = Map TokenName MintStatus
 
 --------------------------------------------------------------------------------
 -- Actions ---------------------------------------------------------------------
 
 data Action
-  = RequestMint Asset
+  = RequestMint TokenName
   | HandleBackendEvent Event
 
 derive instance eqAction ∷ Eq Action
@@ -33,8 +34,8 @@ instance showAction ∷ Show Action where
 -- Events ----------------------------------------------------------------------
 
 data Event
-  = EventMintRequested Asset TxId
-  | EventMintConfirmed Asset TxId
+  = EventMintRequested NativeAsset TxId
+  | EventMintConfirmed NativeAsset TxId
 
 derive instance eqEvent ∷ Eq Event
 instance showEvent ∷ Show Event where
@@ -49,13 +50,14 @@ instance showEvent ∷ Show Event where
 
 reduce ∷ State → Action → State
 reduce state = case _ of
-  RequestMint asset → Map.insert asset (MintRequested Nothing) state
+  RequestMint tokenName →
+    Map.insert tokenName MintRequest state
   HandleBackendEvent event →
     case event of
-      EventMintRequested asset txId →
-        Map.insert asset (MintRequested (Just txId)) state
-      EventMintConfirmed asset txId →
-        Map.insert asset (MintConfirmed txId) state
+      EventMintRequested { policy, name } tx →
+        Map.insert name (MintRequestReceived { policy, tx }) state
+      EventMintConfirmed { policy, name } tx →
+        Map.insert name (MintConfirmed { policy, tx }) state
 
 --------------------------------------------------------------------------------
 -- Hooks -----------------------------------------------------------------------
@@ -65,7 +67,7 @@ useAssets
   . MonadEffect m
   ⇒ Eq ctx
   ⇒ LogMessages m
-  ⇒ Minting m
+  ⇒ Assets m
   ⇒ UseHelixHook State Action ctx m
 useAssets = makeStore "assets" reduce Map.empty do
   requestMintMiddleware |> stateLogger |> actionLogger
@@ -73,14 +75,15 @@ useAssets = makeStore "assets" reduce Map.empty do
 --------------------------------------------------------------------------------
 -- Middlewares -----------------------------------------------------------------
 
-requestMintMiddleware ∷ ∀ m. Minting m ⇒ HelixMiddleware State Action m
+requestMintMiddleware ∷ ∀ m. Assets m ⇒ HelixMiddleware State Action m
 requestMintMiddleware _ctx action next = do
   next action
   case action of
-    RequestMint asset →
-      mintAsset asset >>= case _ of
-        Just txId → next (HandleBackendEvent (EventMintRequested asset txId))
+    RequestMint name →
+      mintAsset name >>= case _ of
         Nothing → pass
+        Just { policy, tx } →
+          next $ HandleBackendEvent $ EventMintRequested { policy, name } tx
     _ → pass
 
 actionLogger ∷ ∀ m. LogMessages m ⇒ HelixMiddleware State Action m

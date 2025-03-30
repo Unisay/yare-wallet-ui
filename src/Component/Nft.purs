@@ -2,10 +2,8 @@ module Yare.Component.Nft (component) where
 
 import Custom.Prelude hiding (div)
 
-import Cardano.Value (parsePolicy, parseTokenName, printPolicy, printTokenName)
-import Cardano.Value.Asset (nativeToken)
+import Cardano.Value (parseTokenName, printTokenName)
 import Cardano.Value.Token.Name (TokenName)
-import Cardano.Value.Token.Policy (Policy)
 import Component.Html.Layout (layout)
 import Component.Html.Sidebar (sidebar)
 import Data.Form.Field (Field)
@@ -21,19 +19,18 @@ import Store (Action(..))
 import Store as Store
 import Web.UIEvent.KeyboardEvent as KE
 import Yare.Capability.LogMessages (class LogMessages)
-import Yare.Capability.Resource.Minting (class Minting)
+import Yare.Capability.Resource.Assets (class Assets)
 import Yare.Data.Route as Route
 
 type Error = String
 type Input = Unit
 type State =
-  { policy ∷ Field Policy
-  , tokenName ∷ Field TokenName
+  { tokenName ∷ Field TokenName
   }
 
 component
   ∷ ∀ q i o m
-  . Minting m
+  . Assets m
   ⇒ LogMessages m
   ⇒ MonadEffect m
   ⇒ H.Component q i o m
@@ -42,25 +39,20 @@ component = Hooks.component \_tokens _input → Hooks.do
   st /\ stId ← Hooks.useState initialState
 
   let
-    updatePolicy str = Hooks.modify_ stId \s →
-      s { policy = Field.update s.policy str }
-
     updateTokenName str = Hooks.modify_ stId \s →
       s { tokenName = Field.update s.tokenName str }
 
     onSubmit = do
-      { policy, tokenName } ← Hooks.get stId
-      case Field.result policy, Field.result tokenName of
-        Just p, Just t → do
+      { tokenName } ← Hooks.get stId
+      case Field.result tokenName of
+        Just t → do
           Hooks.put stId initialState -- reset form
-          assets.dispatch (RequestMint (nativeToken p t))
-        _, _ → pass
+          assets.dispatch (RequestMint t)
+        _ → pass
 
   Hooks.pure do
     let
-      formIsDisabled = not do
-        Field.hasResult st.policy
-          && Field.hasResult st.tokenName
+      formIsDisabled = not (Field.hasResult st.tokenName)
 
       submitOnEnter keyboardEvent =
         case KE.code keyboardEvent of
@@ -69,30 +61,7 @@ component = Hooks.component \_tokens _input → Hooks.do
 
     layout "NFT" (sidebar (Route.Nft Route.Mint))
       [ HH.div [ css "box" ]
-          [ HH.div [ css "field"]
-              [ HH.label
-                  [ css "label", HP.for "policy" ]
-                  [ HH.text "Policy ID" ]
-              , HH.div [ css "control has-icons-left" ]
-                  [ HH.input
-                      [ css "input is-family-code"
-                      , HP.type_ HP.InputText
-                      , HP.id "policy"
-                      , HP.name "policy"
-                      , HP.value (Field.value st.policy)
-                      , HP.required true
-                      , HP.placeholder "Hex-encoded"
-                      , HE.onValueInput updatePolicy
-                      , HE.onKeyDown submitOnEnter
-                      ]
-                  , HH.span
-                      [ css "icon is-small is-left" ]
-                      [ HH.i [ css "fas fa-thumbtack" ] [] ]
-                  ]
-              , HH.maybeElem (Field.error st.policy) \err →
-                  HH.p [ css "help is-danger" ] [ HH.text err ]
-              ]
-          , HH.div [ css "field" ]
+          [ HH.div [ css "field" ]
               [ HH.label
                   [ css "label", HP.for "tokenName" ]
                   [ HH.text "Token Name" ]
@@ -122,7 +91,7 @@ component = Hooks.component \_tokens _input → Hooks.do
                       , HE.onClick \_mouseEvent → onSubmit
                       , HP.disabled formIsDisabled
                       ]
-                      [ HH.text "Initiate Minting" ]
+                      [ HH.text "Initiate Assets" ]
                   ]
               ]
           ]
@@ -130,7 +99,6 @@ component = Hooks.component \_tokens _input → Hooks.do
 
 initialState ∷ State
 initialState =
-  { policy: Field.make parsePolicy printPolicy ""
-  , tokenName: Field.make parseTokenName printTokenName ""
+  { tokenName: Field.make parseTokenName printTokenName ""
   }
 

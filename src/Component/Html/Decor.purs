@@ -6,9 +6,10 @@ import Cardano.Address (Address, renderAddress)
 import Cardano.Block (BlockHash, renderBlockHash)
 import Cardano.Script (ScriptHash, renderScriptHash)
 import Cardano.Transaction (TxId, TxIx, renderTxId, renderTxIx)
+import Data.String as String
 import Halogen.HTML (HTML, a)
 import Halogen.HTML.Extended (css, span, text)
-import Halogen.HTML.Properties (href)
+import Halogen.HTML.Properties (href, title)
 
 index ∷ ∀ w i. Int → HTML w i
 index = text <<< show
@@ -30,11 +31,19 @@ slotNo ∷ ∀ w i. Int → HTML w i
 slotNo slot = span [ css "is-family-code" ] [ text ("Slot # " <> show slot) ]
 
 address ∷ ∀ w i. Address → HTML w i
-address addr = a
-  [ href ("https://preprod.cardanoscan.io/address/" <> renderAddress addr)
-  , css "is-family-code"
-  ]
-  [ text (renderAddress addr) ]
+address addr =
+  let
+    addr' = renderAddress addr
+    url = "https://preprod.cardanoscan.io/address/" <> addr'
+    len = String.length addr'
+    label = text
+      if len > 63 then
+        String.take 30 addr'
+          <> "..."
+          <> String.drop (len - 30) addr'
+      else addr'
+  in
+    a [ href url, title addr', css "is-family-code" ] [ label ]
 
 txId ∷ ∀ w i. TxId → HTML w i
 txId id = a

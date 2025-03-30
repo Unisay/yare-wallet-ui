@@ -5,8 +5,9 @@ module Yare.Api.Endpoint
 
 import Custom.Prelude hiding ((/))
 
+import Cardano.Value.Token.Name (TokenName, parseTokenNameHex, printTokenNameHex)
 import Data.Generic.Rep (class Generic)
-import Routing.Duplex (RouteDuplex', root)
+import Routing.Duplex (RouteDuplex', as, root, segment)
 import Routing.Duplex.Generic (noArgs, sum)
 import Routing.Duplex.Generic.Syntax ((/))
 
@@ -16,7 +17,7 @@ data Endpoint
   | Network
   | Scripts
   | Addresses
-  | NftMint
+  | Assets TokenName
 
 derive instance genericEndpoint ∷ Generic Endpoint _
 
@@ -27,6 +28,6 @@ endpointCodec = root $ sum
   , "Network": "network" / noArgs
   , "Scripts": "script" / noArgs
   , "Addresses": "addresses" / noArgs
-  , "NftMint": "nft" / "mint" / noArgs
+  , "Assets": "assets" / as printTokenNameHex parseTokenNameHex segment
   }
 

@@ -60,7 +60,7 @@ codecAssetQuantity =
 
 valueLovelace ∷ Value → BigInt
 valueLovelace { assets } =
-  Array.find (\{ asset } → asset == Asset.Ada) assets |> case _ of
+  Array.find (\{ asset } → asset == Asset.Lovelace) assets |> case _ of
     Just { quantity } → quantity
     Nothing → zero
 

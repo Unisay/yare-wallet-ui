@@ -4,6 +4,10 @@ module Cardano.Value.Token.Name
   , readTokenName
   , printTokenName
   , codecTokenName
+  , parseTokenNameHex
+  , readTokenNameHex
+  , printTokenNameHex
+  , codecTokenNameHex
   , unsafeTokenName
   ) where
 
@@ -12,6 +16,7 @@ import Custom.Prelude
 import Data.Codec.Argonaut (JsonCodec)
 import Data.Codec.Argonaut as CA
 import Data.String as String
+import Data.String.Base16 (base16Decode, base16Encode)
 
 newtype TokenName = TokenName String
 
@@ -39,3 +44,19 @@ printTokenName (TokenName tokenName) = tokenName
 codecTokenName ∷ JsonCodec TokenName
 codecTokenName =
   CA.prismaticCodec "TokenName" readTokenName printTokenName CA.string
+
+--------------------------------------------------------------------------------
+-- Hexadecimal representation --------------------------------------------------
+
+parseTokenNameHex ∷ String → Either String TokenName
+parseTokenNameHex = map TokenName <<< base16Decode
+
+readTokenNameHex ∷ String → Maybe TokenName
+readTokenNameHex = hush <<< parseTokenNameHex
+
+printTokenNameHex ∷ TokenName → String
+printTokenNameHex (TokenName tokenName) = base16Encode tokenName
+
+codecTokenNameHex ∷ JsonCodec TokenName
+codecTokenNameHex =
+  CA.prismaticCodec "TokenName" readTokenNameHex printTokenNameHex CA.string

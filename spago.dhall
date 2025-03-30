@@ -15,6 +15,7 @@
   , "either"
   , "foldable-traversable"
   , "formatters"
+  , "functions"
   , "halogen"
   , "halogen-helix"
   , "halogen-hooks"
@@ -34,7 +35,6 @@
   , "strings"
   , "transformers"
   , "unicode"
-  , "variant"
   , "web-html"
   , "web-uievents"
   ]
